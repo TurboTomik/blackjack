@@ -1,0 +1,6 @@
+# Compiled object files
+*.o
+
+# Compiled binaries / executables
+blackjack
+*.out
