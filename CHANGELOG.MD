@@ -7,12 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- Basic ncurses initialization (`initscr`, `cbreak`, `noecho`, `keypad`)
 - Card, Deck, and Hand modules separating game data from game logic
+- Deck build/shuffle/deal using a Fisher-Yates shuffle
 - `GameState` struct consolidating deck, dealer hand, player hand, money, and bet into a single explicit object passed by pointer throughout the codebase
-- Betting phase state machine (`GamePhase`: `STATE_BETTING`, `STATE_PLAYING`, `STATE_ROUND_OVER`, `STATE_GAME_OVER`) replacing ad-hoc input handling in `main()`
+- `GamePhase` field (`STATE_BETTING`, `STATE_PLAYING`, `STATE_ROUND_OVER`) added to `GameState`, replacing ad-hoc input handling in `main()`
+- `handle_betting_input()` and `handle_round_over_input()` in `main.c`, and `handle_player_input()` in `game.c`, as phase-specific input handlers
 - Blackjack hand scoring with soft-ace adjustment (Aces count as 11, drop to 1 as needed to avoid busting)
 - Win/lose/push determination (`determine_winner`) and payout application (`apply_result`)
 - ncurses UI split into header (balance/bet), card rendering, and playground composition
+- First working card rendering via `newwin` and `box`
 - Card subwindow lifecycle management (`HandRenderer`) to prevent leaking `WINDOW*` subwindows on every redraw
 - Bet increase/decrease controls (`KEY_UP` / `KEY_DOWN`) with min/max clamping
 - `.gitignore` for build artifacts, editor files, and OS-generated files
@@ -28,14 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Replaced global `extern` game-state variables (`dealer_hand`, `player_score`, etc.) with a single `GameState` struct passed explicitly to functions
-- Renamed `start_game()` to `begin_round()` / `finish_round()` to reflect that a `GameState` now persists across multiple rounds instead of being reinitialized each game
 - Reorganized source into responsibility-based modules (`card`, `deck`, `hand`, `game`, `input`, `ui_header`, `ui_cards`, `ui_playground`) instead of a flat `logic.c` / `ui.c` split
-
-## [0.1.0] - Initial prototype
-
-### Added
-- Basic ncurses initialization (`initscr`, `cbreak`, `noecho`, `keypad`)
-- Deck build/shuffle/deal using a Fisher-Yates shuffle
-- Simple card struct with rank and suit enums
-- Initial hit/stand loop for the player
-- First working card rendering via `newwin` and `box`
+- Removed the blocking `player_turn()` input loop in favor of single-keypress-driven `handle_player_input()`, called from `main()`'s phase dispatch loop
+- Split `start_round()` into `begin_round()` (deal initial cards, transition to `STATE_PLAYING`) and `finish_round()` (resolve outcome, transition to `STATE_ROUND_OVER`)
+- Replaced `main()`'s flat `switch(ch)` with `switch(game.phase)`, dispatching each keypress to a phase-specific handler

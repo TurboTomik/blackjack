@@ -18,6 +18,40 @@ initialization ()
   keypad (stdscr, TRUE);
 }
 
+static void
+handle_betting_input (GameState *game, int ch)
+{
+  switch (ch)
+    {
+    case KEY_UP:
+      bet_increase (&game->bet);
+      draw_bet (game->bet);
+      wnoutrefresh (stdscr);
+      doupdate ();
+      break;
+    case KEY_DOWN:
+      bet_decrease (&game->bet);
+      draw_bet (game->bet);
+      wnoutrefresh (stdscr);
+      doupdate ();
+      break;
+    case '\n':
+    case ' ':
+      begin_round (game);
+      break;
+    }
+}
+
+static void
+handle_round_over_input (GameState *game, int ch)
+{
+  (void)ch;
+  game->phase = STATE_BETTING;
+  draw_header (game->money, game->bet);
+  wnoutrefresh (stdscr);
+  doupdate ();
+}
+
 int
 main (void)
 {
@@ -36,30 +70,23 @@ main (void)
   while (running)
     {
       ch = getch ();
-      switch (ch)
+
+      if (ch == 'q')
         {
-        case (KEY_UP):
-          bet_increase (&game.bet);
-          if (game.bet > MAX_BET)
-            game.bet = MAX_BET;
-          draw_bet (game.bet);
-          wnoutrefresh (stdscr);
-          doupdate ();
-          break;
-        case (KEY_DOWN):
-          bet_decrease (&game.bet);
-          if (game.bet < MIN_BET)
-            game.bet = MIN_BET;
-          draw_bet (game.bet);
-          wnoutrefresh (stdscr);
-          doupdate ();
-          break;
-        case (' '):
-          start_round (&game);
-          break;
-        case ('q'):
           running = 0;
+          continue;
+        }
+
+      switch (game.phase)
+        {
+        case STATE_BETTING:
+          handle_betting_input (&game, ch);
           break;
+        case STATE_PLAYING:
+          handle_player_input (&game, ch);
+          break;
+        case STATE_ROUND_OVER:
+          handle_round_over_input (&game, ch);
         }
     }
 

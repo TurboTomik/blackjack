@@ -58,37 +58,6 @@ apply_result (GameState *game, GameResult result)
 }
 
 void
-player_turn (GameState *game)
-{
-  int ch;
-  char running = 1;
-
-  while (running)
-    {
-      ch = getch ();
-      switch (ch)
-        {
-        case ('h'):
-          if (!deal_to_hand (&game->deck, &game->player))
-            {
-              running = 0;
-              break;
-            }
-          calculate_hand_score (&game->player);
-          draw_playground (game);
-          doupdate ();
-          if (is_bust (&game->player))
-            running = 0;
-          break;
-
-        case (' '):
-          running = 0;
-          break;
-        }
-    }
-}
-
-void
 dealer_turn (GameState *game)
 {
   calculate_hand_score (&game->dealer);
@@ -107,10 +76,11 @@ init_game_state (GameState *game, unsigned int starting_money,
   memset (game, 0, sizeof *game);
   game->money = starting_money;
   game->bet = starting_bet;
+  game->phase = STATE_BETTING;
 }
 
 void
-start_round (GameState *game)
+begin_round (GameState *game)
 {
   reset_hand (&game->dealer);
   reset_hand (&game->player);
@@ -128,15 +98,40 @@ start_round (GameState *game)
   draw_playground (game);
   doupdate ();
 
-  player_turn (game);
+  game->phase = STATE_PLAYING;
+}
 
-  if (!is_bust (&game->player))
-    dealer_turn (game);
-
+static void
+finish_round (GameState *game)
+{
   GameResult result = determine_winner (game);
   apply_result (game, result);
 
   display_result (result);
   draw_header (game->money, game->bet);
   doupdate ();
+
+  game->phase = STATE_ROUND_OVER;
+}
+
+void
+handle_player_input (GameState *game, int ch)
+{
+  switch (ch)
+    {
+    case ('h'):
+      if (!deal_to_hand (&game->deck, &game->player))
+        break;
+      calculate_hand_score (&game->player);
+      draw_playground (game);
+      doupdate ();
+      if (is_bust (&game->player))
+        finish_round (game);
+      break;
+
+    case (' '):
+      dealer_turn (game);
+      finish_round (game);
+      break;
+    }
 }

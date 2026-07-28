@@ -10,6 +10,13 @@
 
 #define DEALER_STAND 17
 
+typedef enum
+{
+  STATE_BETTING,
+  STATE_PLAYING,
+  STATE_ROUND_OVER,
+} GamePhase;
+
 typedef struct
 {
   Deck deck;
@@ -19,6 +26,8 @@ typedef struct
 
   unsigned money;
   unsigned bet;
+
+  GamePhase phase;
 } GameState;
 
 typedef enum
@@ -32,6 +41,7 @@ void bet_increase (unsigned *bet);
 void bet_decrease (unsigned *bet);
 void init_game_state (GameState *game, unsigned int starting_money,
                       unsigned int starting_bet);
-void start_round (GameState *game);
+void begin_round (GameState *game);
+void handle_player_input (GameState *game, int ch);
 
 #endif // !GAME_H
