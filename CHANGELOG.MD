@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.1.0]
+
 ### Added
 - Basic ncurses initialization (`initscr`, `cbreak`, `noecho`, `keypad`)
 - Card, Deck, and Hand modules separating game data from game logic
