@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Added
+ - A separate file, `input.c`, into which the functions `handle_betting_input`, `handle_player_input`, and `handle_round_over_input` were moved from `main.c` and `game.c`
+
+### Changed
+ - `finish_round` is no longer a static function
 
 ## [0.1.0]
 

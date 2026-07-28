@@ -101,7 +101,7 @@ begin_round (GameState *game)
   game->phase = STATE_PLAYING;
 }
 
-static void
+void
 finish_round (GameState *game)
 {
   GameResult result = determine_winner (game);
@@ -112,26 +112,4 @@ finish_round (GameState *game)
   doupdate ();
 
   game->phase = STATE_ROUND_OVER;
-}
-
-void
-handle_player_input (GameState *game, int ch)
-{
-  switch (ch)
-    {
-    case ('h'):
-      if (!deal_to_hand (&game->deck, &game->player))
-        break;
-      calculate_hand_score (&game->player);
-      draw_playground (game);
-      doupdate ();
-      if (is_bust (&game->player))
-        finish_round (game);
-      break;
-
-    case (' '):
-      dealer_turn (game);
-      finish_round (game);
-      break;
-    }
 }

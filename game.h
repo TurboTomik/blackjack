@@ -41,7 +41,8 @@ void bet_increase (unsigned *bet);
 void bet_decrease (unsigned *bet);
 void init_game_state (GameState *game, unsigned int starting_money,
                       unsigned int starting_bet);
+void dealer_turn (GameState *game);
 void begin_round (GameState *game);
-void handle_player_input (GameState *game, int ch);
+void finish_round (GameState *game);
 
 #endif // !GAME_H
