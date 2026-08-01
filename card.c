@@ -1,8 +1,6 @@
 #include "card.h"
 
-int
-card_value (Rank rank)
-{
+int card_value(Rank rank) {
   if (rank >= TEN)
     return 10;
   if (rank == ACE)

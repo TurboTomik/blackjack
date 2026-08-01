@@ -8,13 +8,12 @@
 #define CARD_WIDTH 9
 #define CARD_PADDING 1
 
-typedef struct
-{
+typedef struct {
   WINDOW *windows[MAX_HAND_SIZE];
   unsigned count;
 } HandRenderer;
 
-void draw_hand_cards (HandRenderer *renderer, WINDOW *orig, const Hand *hand,
-                      int line);
+void draw_hand_cards(HandRenderer *renderer, WINDOW *orig, const Hand *hand,
+                     int line);
 
 #endif // !UI_CARD_H

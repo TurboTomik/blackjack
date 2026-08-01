@@ -10,15 +10,13 @@
 
 #define DEALER_STAND 17
 
-typedef enum
-{
+typedef enum {
   STATE_BETTING,
   STATE_PLAYING,
   STATE_ROUND_OVER,
 } GamePhase;
 
-typedef struct
-{
+typedef struct {
   Deck deck;
 
   Hand dealer;
@@ -30,19 +28,14 @@ typedef struct
   GamePhase phase;
 } GameState;
 
-typedef enum
-{
-  RESULT_PLAYER_WIN,
-  RESULT_DEALER_WIN,
-  RESULT_PUSH
-} GameResult;
+typedef enum { RESULT_PLAYER_WIN, RESULT_DEALER_WIN, RESULT_PUSH } GameResult;
 
-void bet_increase (unsigned *bet);
-void bet_decrease (unsigned *bet);
-void init_game_state (GameState *game, unsigned int starting_money,
-                      unsigned int starting_bet);
-void dealer_turn (GameState *game);
-void begin_round (GameState *game);
-void finish_round (GameState *game);
+void bet_increase(unsigned *bet);
+void bet_decrease(unsigned *bet);
+void init_game_state(GameState *game, unsigned int starting_money,
+                     unsigned int starting_bet);
+void dealer_turn(GameState *game);
+void begin_round(GameState *game);
+void finish_round(GameState *game);
 
 #endif // !GAME_H

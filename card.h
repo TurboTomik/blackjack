@@ -1,8 +1,7 @@
 #ifndef CARD_H
 #define CARD_H
 
-typedef enum
-{
+typedef enum {
   ACE = 1,
   TWO,
   THREE,
@@ -18,20 +17,13 @@ typedef enum
   KING
 } Rank;
 
-typedef enum
-{
-  HEARTS,
-  DIAMONDS,
-  CLUBS,
-  SPADES
-} Suit;
+typedef enum { HEARTS, DIAMONDS, CLUBS, SPADES } Suit;
 
-typedef struct
-{
+typedef struct {
   Rank rank;
   Suit suit;
 } Card;
 
-int card_value (Rank rank);
+int card_value(Rank rank);
 
 #endif // !CARD_H
