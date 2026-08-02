@@ -7,9 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Added
  - A separate file, `input.c`, into which the functions `handle_betting_input`, `handle_player_input`, and `handle_round_over_input` were moved from `main.c` and `game.c`
+ - Added centered modal notifications to display the result of each round (win, lose, push, blackjack, etc.). Notifications remain on screen until dismissed, making important game events easier to notice.
 
 ### Changed
  - `finish_round` is no longer a static function
+ - The game now waits for player confirmation before starting the next betting phase.
+ - Simplified the round transition flow after displaying the round result.
+
+ ### Fixed
+- Fixed a bug where increasing or decreasing the bet could move it one step beyond the configured betting limits. The bet is now properly clamped between `MIN_BET` and `MAX_BET`, ensuring only valid wager amounts can be selected.
 
 ## [0.1.0]
 
