@@ -82,13 +82,19 @@ void begin_round(GameState *game) {
   game->phase = STATE_PLAYING;
 }
 
+static void round_over(GameState *game) {
+  erase();
+  draw_header(game->money, game->bet);
+  wnoutrefresh(stdscr);
+  doupdate();
+}
+
 void finish_round(GameState *game) {
   GameResult result = determine_winner(game);
   apply_result(game, result);
 
   display_result(result);
-  draw_header(game->money, game->bet);
-  doupdate();
 
-  game->phase = STATE_ROUND_OVER;
+  game->phase = STATE_BETTING;
+  round_over(game);
 }

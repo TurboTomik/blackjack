@@ -13,7 +13,6 @@
 typedef enum {
   STATE_BETTING,
   STATE_PLAYING,
-  STATE_ROUND_OVER,
 } GamePhase;
 
 typedef struct {

@@ -1,5 +1,6 @@
 #include "ui_playground.h"
 #include "ui_card.h"
+#include "ui_notification.h"
 #include <ncurses.h>
 #include <string.h>
 
@@ -49,7 +50,6 @@ void display_result(GameResult result) {
   default:
     msg = "";
   }
-  mvprintw(getmaxy(stdscr) - 1, getmaxx(stdscr) / 2 - (int)strlen(msg) / 2,
-           "%s          ", msg);
+  display_notification(msg);
   wnoutrefresh(stdscr);
 }

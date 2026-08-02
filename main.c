@@ -45,8 +45,6 @@ int main(void) {
     case STATE_PLAYING:
       handle_player_input(&game, ch);
       break;
-    case STATE_ROUND_OVER:
-      handle_round_over_input(&game, ch);
     }
   }
 
