@@ -1,17 +1,26 @@
-COMPILER=gcc -c
-LINKER=gcc
-CFLAGS=-Wall -g
+CC = gcc
 
-.PHONY: clean
+CFLAGS = -Wall -Wextra -Werror -std=c17
+ifeq ($(DEBUG),1)
+	CFLAGS += -g
+endif
 
-OBJECTS=$(patsubst %.c, %.o, $(wildcard *.c))
+LDFLAGS = -lncurses
 
-blackjack: $(OBJECTS)
-				$(LINKER) $^ -lncurses -o $@
+TARGET = blackjack
 
-%.o:: %.c %.h
-				$(COMPILER) $(CFLAGS) $< -o $@
+SOURCES = $(wildcard *.c)
+OBJECTS = $(SOURCES:.c=.o)
+
+.PHONY: all clean
+
+all: $(TARGET)
+
+$(TARGET): $(OBJECTS)
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+
+%.o: %.c %.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-				rm -rf *.o
-				rm blackjack
+	rm -f $(OBJECTS) $(TARGET)
