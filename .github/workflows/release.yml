@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y gcc make libncurses-dev
+
+      - name: Build
+        run: make
+
+      - name: Package binary
+        run: |
+          mkdir blackjack-${{ github.ref_name }}
+          cp blackjack blackjack-${{ github.ref_name }}/
+          cp README.md LICENSE blackjack-${{ github.ref_name }}/ || true
+
+          tar -czf blackjack-${{ github.ref_name }}-linux-x86_64.tar.gz \
+            blackjack-${{ github.ref_name }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            blackjack-${{ github.ref_name }}-linux-x86_64.tar.gz
+          generate_release_notes: true
