@@ -17,7 +17,7 @@ int deal_to_hand(Deck *deck, Hand *hand) {
 int calculate_hand_score(Hand *hand) {
   int total = 0, aces = 0;
 
-  for (int i = 0; i < hand->count; i++) {
+  for (unsigned i = 0; i < hand->count; i++) {
     total += card_value(hand->cards[i].rank);
     if (hand->cards[i].rank == ACE)
       aces++;

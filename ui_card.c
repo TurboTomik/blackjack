@@ -46,7 +46,7 @@ static WINDOW *draw_card(WINDOW *orig, int begin_y, int begin_x, Rank rank,
 }
 
 static void clear_card_windows(HandRenderer *renderer) {
-  for (int i = 0; i < renderer->count; i++) {
+  for (unsigned i = 0; i < renderer->count; i++) {
     delwin(renderer->windows[i]);
     renderer->windows[i] = NULL;
   }
@@ -60,7 +60,7 @@ void draw_hand_cards(HandRenderer *renderer, WINDOW *orig, const Hand *hand,
   int row_width = (CARD_WIDTH * hand->count + 2 * (hand->count - 1));
   int row_beginx = getmaxx(orig) / 2 - row_width / 2;
 
-  for (int i = 0; i < hand->count; i++) {
+  for (unsigned i = 0; i < hand->count; i++) {
     renderer->windows[i] =
         draw_card(orig, line, row_beginx + (i * (CARD_WIDTH + 2)),
                   hand->cards[i].rank, hand->cards[i].suit);
