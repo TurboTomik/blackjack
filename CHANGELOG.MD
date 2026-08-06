@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [0.1.1]
+
 ### Added
  - A separate file, `input.c`, into which the functions `handle_betting_input`, `handle_player_input`, and `handle_round_over_input` were moved from `main.c` and `game.c`
  - Added centered modal notifications to display the result of each round (win, lose, push, blackjack, etc.). Notifications remain on screen until dismissed, making important game events easier to notice.
