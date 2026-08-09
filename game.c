@@ -65,12 +65,15 @@ void init_game_state(GameState *game, unsigned int starting_money,
 }
 
 void begin_round(GameState *game) {
+  game->phase = STATE_PLAYING;
+
   reset_hand(&game->dealer);
   reset_hand(&game->player);
 
   build_deck(&game->deck);
   shuffle_deck(&game->deck);
 
+  deal_to_hand(&game->deck, &game->dealer);
   deal_to_hand(&game->deck, &game->dealer);
   deal_to_hand(&game->deck, &game->player);
   deal_to_hand(&game->deck, &game->player);
@@ -80,8 +83,6 @@ void begin_round(GameState *game) {
 
   draw_playground(game);
   doupdate();
-
-  game->phase = STATE_PLAYING;
 }
 
 static void round_over(GameState *game) {
@@ -89,14 +90,17 @@ static void round_over(GameState *game) {
   draw_header(game->money, game->bet);
   wnoutrefresh(stdscr);
   doupdate();
+
+  game->phase = STATE_BETTING;
 }
 
 void finish_round(GameState *game) {
   GameResult result = determine_winner(game);
   apply_result(game, result);
 
+  game->phase = STATE_ROUND_OVER;
+  draw_playground(game);
   display_result(result);
 
-  game->phase = STATE_BETTING;
   round_over(game);
 }

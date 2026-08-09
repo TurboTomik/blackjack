@@ -14,6 +14,6 @@ typedef struct {
 } HandRenderer;
 
 void draw_hand_cards(HandRenderer *renderer, WINDOW *orig, const Hand *hand,
-                     int line);
+                     int line, int hide_first);
 
 #endif // !UI_CARD_H

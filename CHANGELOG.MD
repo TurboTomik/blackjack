@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Added a hidden card for the dealer's first card, making the gameplay follow the standard Blackjack rules.
+
+### Changed
+
+- The dealer's first card is now hidden while the player is making decisions.
+- The hidden card is revealed when the round ends.
+
 ## [0.1.1]
 
 ### Added
