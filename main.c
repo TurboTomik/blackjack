@@ -1,3 +1,4 @@
+#include "bet.h"
 #include "game.h"
 #include "input.h"
 #include "ui_header.h"

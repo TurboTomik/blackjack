@@ -2,6 +2,7 @@
 #define UI_PLAYGROUND_H
 
 #include "game.h"
+#include "result.h"
 #include <ncurses.h>
 
 #define PLAYGROUND_BEGIN_LINE 1

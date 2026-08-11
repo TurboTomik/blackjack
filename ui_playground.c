@@ -1,6 +1,5 @@
 #include "ui_playground.h"
 #include "card.h"
-#include "game.h"
 #include "ui_card.h"
 #include "ui_notification.h"
 #include <ncurses.h>
