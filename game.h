@@ -24,8 +24,6 @@ typedef struct {
   GamePhase phase;
 } GameState;
 
-void bet_increase(unsigned *bet);
-void bet_decrease(unsigned *bet);
 void init_game_state(GameState *game, unsigned int starting_money,
                      unsigned int starting_bet);
 void dealer_turn(GameState *game);
