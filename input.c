@@ -2,6 +2,7 @@
 
 #include <ncurses.h>
 
+#include "bet.h"
 #include "ui_header.h"
 #include "ui_playground.h"
 
