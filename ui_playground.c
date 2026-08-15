@@ -47,15 +47,14 @@ static void draw_player_section(WINDOW *win, const GameState *game) {
   draw_score(win, PLAYER_SCORE_LINE, game->player.score);
 }
 
-WINDOW *draw_playground(const GameState *game) {
+void render_playground(const GameState *game, int hide_dealer_hole) {
   WINDOW *win = get_playground_window();
-  int hole_hidden = (game->phase == STATE_PLAYING);
 
-  draw_dealer_section(win, game, hole_hidden);
+  draw_dealer_section(win, game, hide_dealer_hole);
   draw_player_section(win, game);
 
   wnoutrefresh(win);
-  return win;
+  doupdate();
 }
 
 void display_result(GameResult result) {

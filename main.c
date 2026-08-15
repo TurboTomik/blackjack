@@ -7,8 +7,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-GameState *game;
-
 void initialization() {
   setlocale(LC_ALL, "");
   initscr();
@@ -27,9 +25,7 @@ int main(void) {
   srand(time(NULL));
 
   init_game_state(&game, INIT_MONEY, MIN_BET);
-  draw_header(game.money, game.bet);
-  wnoutrefresh(stdscr);
-  doupdate();
+  render_header(game.money, game.bet);
 
   while (running) {
     ch = getch();

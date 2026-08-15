@@ -8,6 +8,13 @@
 
 static void reset_hand(Hand *hand) { memset(hand, 0, sizeof *hand); }
 
+static void deal_opening_hands(GameState *game) {
+  deal_to_hand(&game->deck, &game->dealer);
+  deal_to_hand(&game->deck, &game->dealer);
+  deal_to_hand(&game->deck, &game->player);
+  deal_to_hand(&game->deck, &game->player);
+}
+
 void init_game_state(GameState *game, unsigned int starting_money,
                      unsigned int starting_bet) {
   memset(game, 0, sizeof *game);
@@ -25,16 +32,12 @@ void begin_round(GameState *game) {
   build_deck(&game->deck);
   shuffle_deck(&game->deck);
 
-  deal_to_hand(&game->deck, &game->dealer);
-  deal_to_hand(&game->deck, &game->dealer);
-  deal_to_hand(&game->deck, &game->player);
-  deal_to_hand(&game->deck, &game->player);
+  deal_opening_hands(game);
 
   calculate_hand_score(&game->dealer);
   calculate_hand_score(&game->player);
 
-  draw_playground(game);
-  doupdate();
+  render_playground(game, 1);
 }
 
 void dealer_turn(GameState *game) {
@@ -43,24 +46,17 @@ void dealer_turn(GameState *game) {
          deal_to_hand(&game->deck, &game->dealer))
     calculate_hand_score(&game->dealer);
 
-  draw_playground(game);
-  doupdate();
-}
-
-static void round_over(GameState *game) {
-  erase();
-  draw_header(game->money, game->bet);
-  wnoutrefresh(stdscr);
-  doupdate();
+  render_playground(game, 0);
 }
 
 void finish_round(GameState *game) {
   GameResult result = determine_winner(&game->dealer, &game->player);
   apply_result(&game->money, game->bet, result);
 
-  game->phase = STATE_BETTING;
-  draw_playground(game);
+  render_playground(game, 0);
   display_result(result);
 
-  round_over(game);
+  game->phase = STATE_BETTING;
+  erase();
+  render_header(game->money, game->bet);
 }
