@@ -1,6 +1,8 @@
 # Compiled object files
+build/
 *.o
 
 # Compiled binaries / executables
+bin/
 blackjack
 *.out
