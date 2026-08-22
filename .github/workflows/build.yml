@@ -28,4 +28,4 @@ jobs:
 
       - name: Check binary exists
         run: |
-          test -f blackjack
+          test -f bin/blackjack
