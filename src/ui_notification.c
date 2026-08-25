@@ -9,7 +9,8 @@ static const char press_button_msg[] = "(Press any button to continue)";
 
 void display_notification(const char *text) {
   WINDOW *window;
-  int pos_y, pos_x;
+  int pos_y;
+  int pos_x;
   pos_y = (getmaxy(stdscr) - WINDOW_HEIGH) / 2;
   pos_x = (getmaxx(stdscr) - WINDOW_WIDTH) / 2;
 

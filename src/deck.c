@@ -4,12 +4,13 @@
 
 void build_deck(Deck *deck) {
   int i = 0;
-  for (Suit s = HEARTS; s <= SPADES; s++)
+  for (Suit s = HEARTS; s <= SPADES; s++) {
     for (Rank r = ACE; r <= KING; r++) {
       deck->cards[i].rank = r;
       deck->cards[i].suit = s;
       i++;
     }
+  }
 }
 
 void shuffle_deck(Deck *deck) {
@@ -23,7 +24,8 @@ void shuffle_deck(Deck *deck) {
 }
 
 Card *deal_card(Deck *deck) {
-  if (deck->pos >= DECK_SIZE)
+  if (deck->pos >= DECK_SIZE) {
     return NULL;
+  }
   return &deck->cards[deck->pos++];
 }

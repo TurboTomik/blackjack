@@ -53,19 +53,19 @@ static void test_equal_scores_are_a_push(void) {
 static void test_apply_result_player_win_adds_bet(void) {
   unsigned money = 200;
   apply_result(&money, 50, RESULT_PLAYER_WIN);
-  CHECK_EQ(money, 250u);
+  CHECK_EQ(money, 250U);
 }
 
 static void test_apply_result_dealer_win_subtracts_bet(void) {
   unsigned money = 200;
   apply_result(&money, 50, RESULT_DEALER_WIN);
-  CHECK_EQ(money, 150u);
+  CHECK_EQ(money, 150U);
 }
 
 static void test_apply_result_push_leaves_money_unchanged(void) {
   unsigned money = 200;
   apply_result(&money, 50, RESULT_PUSH);
-  CHECK_EQ(money, 200u);
+  CHECK_EQ(money, 200U);
 }
 
 /* KNOWN ISSUE, documented rather than silently accepted: apply_result()
@@ -78,7 +78,7 @@ static void test_apply_result_dealer_win_underflows_if_bet_exceeds_money(void) {
   unsigned money = 20;
   apply_result(&money, 50, RESULT_DEALER_WIN);
 
-  CHECK(money > 20u); /* wrapped around instead of going negative/zero */
+  CHECK(money > 20U); /* wrapped around instead of going negative/zero */
 }
 
 void run_result_tests(void) {

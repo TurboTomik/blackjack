@@ -17,6 +17,8 @@ typedef enum {
   KING
 } Rank;
 
+enum { MAX_CARD_VALUE = 10, ACE_VALUE = 11, ACE_ADJUSTMENT = 10 };
+
 typedef enum { HEARTS, DIAMONDS, CLUBS, SPADES } Suit;
 
 typedef struct {

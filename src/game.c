@@ -43,8 +43,9 @@ void begin_round(GameState *game) {
 void dealer_turn(GameState *game) {
   calculate_hand_score(&game->dealer);
   while (game->dealer.score < DEALER_STAND &&
-         deal_to_hand(&game->deck, &game->dealer))
+         deal_to_hand(&game->deck, &game->dealer)) {
     calculate_hand_score(&game->dealer);
+  }
 
   render_playground(game, 0);
 }

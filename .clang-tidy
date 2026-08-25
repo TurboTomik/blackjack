@@ -1,0 +1,16 @@
+Checks: >
+  bugprone-*,
+  clang-analyzer-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  -readability-identifier-length,
+  -clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,
+  -bugprone-random-generator-seed,
+  -bugprone-easily-swappable-parameters,
+
+WarningsAsErrors: ''
+
+HeaderFilterRegex: '.*'
+
+FormatStyle: file

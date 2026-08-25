@@ -9,7 +9,9 @@ static void draw_balance(unsigned money) {
 }
 
 static void draw_bet(unsigned bet) {
-  char buf[32];
+  enum { HEADER_BUFFER_SIZE = 32 };
+
+  char buf[HEADER_BUFFER_SIZE];
   int len = snprintf(buf, sizeof(buf), "%s%d$", msg_bet, bet);
   int x = getmaxx(stdscr);
   int center_posx = (x - len) / 2;

@@ -25,7 +25,7 @@ static void test_deal_to_hand_adds_the_dealt_card(void) {
   int ok = deal_to_hand(&deck, &hand);
 
   CHECK_EQ(ok, 1);
-  CHECK_EQ(hand.count, 1u);
+  CHECK_EQ(hand.count, 1U);
   CHECK_EQ(hand.cards[0].rank, deck.cards[0].rank);
   CHECK_EQ(hand.cards[0].suit, deck.cards[0].suit);
 }
@@ -36,8 +36,9 @@ static void test_deal_to_hand_stops_at_max_size(void) {
   shuffle_deck(&deck);
   Hand hand = fresh_hand();
 
-  for (int i = 0; i < MAX_HAND_SIZE; i++)
+  for (int i = 0; i < MAX_HAND_SIZE; i++) {
     CHECK_EQ(deal_to_hand(&deck, &hand), 1);
+  }
 
   CHECK_EQ(hand.count, (unsigned)MAX_HAND_SIZE);
 
@@ -54,7 +55,7 @@ static void test_deal_to_hand_fails_on_empty_deck(void) {
   Hand hand = fresh_hand();
 
   CHECK_EQ(deal_to_hand(&deck, &hand), 0);
-  CHECK_EQ(hand.count, 0u);
+  CHECK_EQ(hand.count, 0U);
 }
 
 static void test_score_simple_hand(void) {
@@ -63,7 +64,7 @@ static void test_score_simple_hand(void) {
   add_card(&hand, SEVEN, CLUBS);
 
   CHECK_EQ(calculate_hand_score(&hand), 12);
-  CHECK_EQ(hand.score, 12u);
+  CHECK_EQ(hand.score, 12U);
 }
 
 static void test_ace_counts_as_eleven_when_it_fits(void) {

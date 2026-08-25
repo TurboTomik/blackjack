@@ -45,13 +45,14 @@ static WINDOW *draw_card(WINDOW *orig, int begin_y, int begin_x, Rank rank,
   return card;
 }
 
-static WINDOW *draw_card_back(WINDOW *orig, unsigned begin_y,
-                              unsigned begin_x) {
+static WINDOW *draw_card_back(WINDOW *orig, int begin_y, int begin_x) {
   WINDOW *card = derwin(orig, CARD_HEIGH, CARD_WIDTH, begin_y, begin_x);
   box(card, 0, 0);
-  for (int y = 1; y < CARD_HEIGH - 1; y++)
-    for (int x = 1; x < CARD_WIDTH - 1; x++)
+  for (int y = 1; y < CARD_HEIGH - 1; y++) {
+    for (int x = 1; x < CARD_WIDTH - 1; x++) {
       mvwaddch(card, y, x, '?');
+    }
+  }
   wnoutrefresh(card);
   return card;
 }
@@ -68,16 +69,21 @@ void draw_hand_cards(HandRenderer *renderer, WINDOW *orig, const Hand *hand,
                      int line, int hide_first) {
   clear_card_windows(renderer);
 
-  int row_width = (CARD_WIDTH * hand->count + 2 * (hand->count - 1));
-  int row_beginx = getmaxx(orig) / 2 - row_width / 2;
+  int row_width = CARD_WIDTH * (int)hand->count;
+  if (hand->count > 1) {
+    row_width += 2 * ((int)hand->count - 1);
+  }
+
+  int row_beginx = (getmaxx(orig) / 2) - (row_width / 2);
 
   for (unsigned i = 0; i < hand->count; i++) {
-    int x = row_beginx + (i * (CARD_WIDTH + 2));
-    if (hide_first && i == 0)
+    int x = row_beginx + ((int)i * (CARD_WIDTH + 2));
+    if (hide_first && i == 0) {
       renderer->windows[i] = draw_card_back(orig, line, x);
-    else
+    } else {
       renderer->windows[i] =
           draw_card(orig, line, x, hand->cards[i].rank, hand->cards[i].suit);
+    }
   }
   renderer->count = hand->count;
 }

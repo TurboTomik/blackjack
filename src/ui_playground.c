@@ -10,26 +10,35 @@ static HandRenderer dealer_renderer = {0};
 static HandRenderer player_renderer = {0};
 
 static WINDOW *get_playground_window(void) {
-  if (!playground)
+  if (!playground) {
     playground = newwin(getmaxy(stdscr) - PLAYGROUND_MARGIN_BOT,
                         getmaxx(stdscr), PLAYGROUND_BEGIN_LINE, 0);
-  else
+  } else {
     werase(playground);
+  }
   return playground;
 }
 
-static int dealer_visible_score(const GameState *game, int hole_hidden) {
-  if (hole_hidden && game->dealer.count > 1)
+static unsigned dealer_visible_score(const GameState *game, int hole_hidden) {
+  if (hole_hidden && game->dealer.count > 1) {
     return card_value(game->dealer.cards[1].rank);
+  }
   return game->dealer.score;
 }
 
 static void draw_label(WINDOW *win, int line, const char *label) {
-  mvwprintw(win, line, getmaxx(win) / 2 - strlen(label) / 2, "%s", label);
+  int x = (getmaxx(win) / 2) - (int)(strlen(label) / 2);
+
+  mvwprintw(win, line, x, "%s", label);
 }
 
-static void draw_score(WINDOW *win, int line, int score) {
-  mvwprintw(win, line, getmaxx(win) / 2 - 5, "%2d points", score);
+static void draw_score(WINDOW *win, int line, unsigned score) {
+  enum { SCORE_TEXT_SIZE = 32 };
+  char buf[SCORE_TEXT_SIZE];
+  snprintf(buf, sizeof buf, "%2d points", score);
+  int x = (getmaxx(win) / 2) - (int)(strlen(buf) / 2);
+
+  mvwprintw(win, line, x, "%s", buf);
 }
 
 static void draw_dealer_section(WINDOW *win, const GameState *game,
