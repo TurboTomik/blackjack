@@ -9,12 +9,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Added a hidden card for the dealer's first card, making the gameplay follow the standard Blackjack rules.
+- Added a 1.5x payout for a player Blackjack.
 
 ### Changed
 
 - The dealer's first card is now hidden while the player is making decisions.
 - The hidden card is revealed when the round ends.
 - Prevented a new round from starting when the bet exceeds the player's available money.
+- Player Blackjack is now distinguished from a regular win.
+- A player and dealer Blackjack now results in a push.
 
 ## [0.1.1]
 

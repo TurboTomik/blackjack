@@ -43,6 +43,18 @@ static void test_higher_score_wins(void) {
   CHECK_EQ(determine_winner(&dealer, &player), RESULT_DEALER_WIN);
 }
 
+static void test_player_blackjack(void) {
+  Hand dealer = hand_with_score(17);
+  Hand player = hand_with_score(21);
+  CHECK_EQ(determine_winner(&dealer, &player), RESULT_BLACKJACK);
+}
+
+static void test_both_blackjack(void) {
+  Hand dealer = hand_with_score(21);
+  Hand player = hand_with_score(21);
+  CHECK_EQ(determine_winner(&dealer, &player), RESULT_PUSH);
+}
+
 static void test_equal_scores_are_a_push(void) {
   Hand dealer = hand_with_score(19);
   Hand player = hand_with_score(19);
@@ -68,17 +80,10 @@ static void test_apply_result_push_leaves_money_unchanged(void) {
   CHECK_EQ(money, 200U);
 }
 
-/* KNOWN ISSUE, documented rather than silently accepted: apply_result()
-   subtracts directly into an unsigned. If a loss is ever applied with
-   bet > money, this wraps around to a huge number instead of clamping at
-   0. Not currently reachable through normal play (nothing stops betting
-   more than you have, so it actually *is* reachable once money drops
-   below MIN_BET) -- flagging this so it doesn't get lost. */
-static void test_apply_result_dealer_win_underflows_if_bet_exceeds_money(void) {
-  unsigned money = 20;
-  apply_result(&money, 50, RESULT_DEALER_WIN);
-
-  CHECK(money > 20U); /* wrapped around instead of going negative/zero */
+static void test_apply_result_player_win_blackjack(void) {
+  unsigned money = 200;
+  apply_result(&money, 50, RESULT_BLACKJACK);
+  CHECK_EQ(money, 275U);
 }
 
 void run_result_tests(void) {
@@ -86,9 +91,11 @@ void run_result_tests(void) {
   RUN_TEST(test_player_bust_beats_dealer_bust);
   RUN_TEST(test_dealer_bust_is_player_win);
   RUN_TEST(test_higher_score_wins);
+  RUN_TEST(test_player_blackjack);
+  RUN_TEST(test_both_blackjack);
   RUN_TEST(test_equal_scores_are_a_push);
   RUN_TEST(test_apply_result_player_win_adds_bet);
   RUN_TEST(test_apply_result_dealer_win_subtracts_bet);
   RUN_TEST(test_apply_result_push_leaves_money_unchanged);
-  RUN_TEST(test_apply_result_dealer_win_underflows_if_bet_exceeds_money);
+  RUN_TEST(test_apply_result_player_win_blackjack);
 }

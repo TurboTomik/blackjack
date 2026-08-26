@@ -8,6 +8,9 @@ GameResult determine_winner(Hand *dealer_hand, Hand *player_hand) {
   if (is_bust(dealer_hand)) {
     return RESULT_PLAYER_WIN;
   }
+  if (player_hand->score == BLACKJACK && dealer_hand->score != BLACKJACK) {
+    return RESULT_BLACKJACK;
+  }
   if (player_hand->score > dealer_hand->score) {
     return RESULT_PLAYER_WIN;
   }
@@ -24,6 +27,9 @@ void apply_result(unsigned *money, unsigned bet, GameResult result) {
     break;
   case RESULT_DEALER_WIN:
     *money -= bet;
+    break;
+  case RESULT_BLACKJACK:
+    *money += (int)(bet * BLACKJACK_COEFFICIENT);
     break;
   case RESULT_PUSH:
     break;
