@@ -1,10 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "deck.h"
 #include "hand.h"
 
 #define INIT_MONEY 200
-
 #define DEALER_STAND 17
 
 typedef enum {
@@ -24,8 +24,6 @@ typedef struct {
   GamePhase phase;
 } GameState;
 
-void init_game_state(GameState *game, unsigned int starting_money,
-                     unsigned int starting_bet);
 void dealer_turn(GameState *game);
 void begin_round(GameState *game);
 void finish_round(GameState *game);

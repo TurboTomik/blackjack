@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - The dealer's first card is now hidden while the player is making decisions.
 - The hidden card is revealed when the round ends.
+- Prevented a new round from starting when the bet exceeds the player's available money.
 
 ## [0.1.1]
 

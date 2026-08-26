@@ -17,7 +17,8 @@ LOGIC_SOURCES := $(SRC_DIR)/card.c \
                  $(SRC_DIR)/deck.c \
                  $(SRC_DIR)/hand.c \
                  $(SRC_DIR)/bet.c \
-                 $(SRC_DIR)/result.c
+                 $(SRC_DIR)/result.c \
+								 $(SRC_DIR)/round.c
 TEST_SOURCES := $(wildcard $(TESTS_DIR)/*.c)
 
 CC = gcc

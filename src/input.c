@@ -1,6 +1,9 @@
 #include "input.h"
 
+#include <ncurses.h>
+
 #include "bet.h"
+#include "round.h"
 #include "ui_header.h"
 #include "ui_playground.h"
 
@@ -16,7 +19,9 @@ void handle_betting_input(GameState *game, int ch) {
     break;
   case '\n':
   case ' ':
-    begin_round(game);
+    if (can_start_round(game->money, game->bet)) {
+      begin_round(game);
+    }
     break;
 
   default:

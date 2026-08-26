@@ -1,6 +1,7 @@
 #include "bet.h"
 #include "game.h"
 #include "input.h"
+#include "round.h"
 #include "ui_header.h"
 #include <locale.h>
 #include <ncurses.h>

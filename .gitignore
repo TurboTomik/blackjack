@@ -6,6 +6,7 @@ build/
 bin/
 blackjack
 *.out
+tests/run_tests
 
 compile_commands.json
 *.d
