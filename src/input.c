@@ -3,6 +3,7 @@
 #include <ncurses.h>
 
 #include "bet.h"
+#include "game.h"
 #include "round.h"
 #include "ui_header.h"
 #include "ui_playground.h"
@@ -38,6 +39,21 @@ void handle_player_input(GameState *game, int ch) {
     calculate_hand_score(&game->player);
     render_playground(game, 1);
     if (is_bust(&game->player)) {
+      finish_round(game);
+    }
+    break;
+
+  case 'd':
+    if (!can_double_down(game->money, game->bet, game->player.count)) {
+      break;
+    }
+
+    double_down(game);
+    render_playground(game, 1);
+    if (is_bust(&game->player)) {
+      finish_round(game);
+    } else {
+      dealer_turn(game);
       finish_round(game);
     }
     break;

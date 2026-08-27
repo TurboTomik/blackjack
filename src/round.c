@@ -44,3 +44,14 @@ void play_dealer_hand(GameState *game) {
     calculate_hand_score(&game->dealer);
   }
 }
+
+int can_double_down(unsigned int money, unsigned int bet,
+                    unsigned int player_card_count) {
+  return player_card_count == 2 && can_start_round(money, bet * 2);
+}
+
+void double_down(GameState *game) {
+  game->bet *= 2;
+  deal_to_hand(&game->deck, &game->player);
+  calculate_hand_score(&game->player);
+}

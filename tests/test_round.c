@@ -107,6 +107,56 @@ static void test_dealer_never_exceeds_deck_capacity(void) {
   CHECK(ran_to_completion);
 }
 
+/* --- can_double_down --- */
+
+static void test_double_down_allowed_with_two_cards_and_enough_money(void) {
+  CHECK(can_double_down(/*money=*/200, /*bet=*/50, /*player_card_count=*/2));
+}
+
+static void test_double_down_not_allowed_after_hitting(void) {
+  CHECK(!can_double_down(/*money=*/200, /*bet=*/50, /*player_card_count=*/3));
+}
+
+static void test_double_down_not_allowed_with_one_card(void) {
+  CHECK(!can_double_down(/*money=*/200, /*bet=*/50, /*player_card_count=*/1));
+}
+
+static void test_double_down_blocked_if_doubled_bet_exceeds_money(void) {
+  CHECK(!can_double_down(/*money=*/60, /*bet=*/50, /*player_card_count=*/2));
+}
+
+static void
+test_double_down_allowed_when_doubled_bet_exactly_equals_money(void) {
+  CHECK(can_double_down(/*money=*/100, /*bet=*/50, /*player_card_count=*/2));
+}
+
+/* --- double_down --- */
+
+static void test_double_down_doubles_the_bet(void) {
+  GameState game;
+  init_game_state(&game, 200, 50);
+  start_new_round(&game);
+  double_down(&game);
+  CHECK_EQ(game.bet, 100U);
+}
+
+static void test_double_down_deals_exactly_one_card(void) {
+  GameState game;
+  init_game_state(&game, 200, 50);
+  start_new_round(&game);
+  CHECK_EQ(game.player.count, 2U);
+  double_down(&game);
+  CHECK_EQ(game.player.count, 3U);
+}
+
+static void test_double_down_rescoces_the_hand(void) {
+  GameState game;
+  init_game_state(&game, 200, 50);
+  start_new_round(&game);
+  double_down(&game);
+  CHECK(game.player.score > 0);
+}
+
 void run_round_tests(void) {
   RUN_TEST(test_bet_equal_to_money_is_allowed);
   RUN_TEST(test_bet_less_than_money_is_allowed);
@@ -123,4 +173,14 @@ void run_round_tests(void) {
 
   RUN_TEST(test_dealer_stops_at_or_above_stand_value);
   RUN_TEST(test_dealer_never_exceeds_deck_capacity);
+
+  RUN_TEST(test_double_down_allowed_with_two_cards_and_enough_money);
+  RUN_TEST(test_double_down_not_allowed_after_hitting);
+  RUN_TEST(test_double_down_not_allowed_with_one_card);
+  RUN_TEST(test_double_down_blocked_if_doubled_bet_exceeds_money);
+  RUN_TEST(test_double_down_allowed_when_doubled_bet_exactly_equals_money);
+
+  RUN_TEST(test_double_down_doubles_the_bet);
+  RUN_TEST(test_double_down_deals_exactly_one_card);
+  RUN_TEST(test_double_down_rescoces_the_hand);
 }
