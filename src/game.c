@@ -2,6 +2,7 @@
 #include "result.h"
 #include "round.h"
 #include "ui_header.h"
+#include "ui_key_hints.h"
 #include "ui_playground.h"
 #include <ncurses.h>
 
@@ -9,6 +10,7 @@ void begin_round(GameState *game) {
   game->phase = STATE_PLAYING;
   start_new_round(game);
   render_playground(game, 1);
+  render_key_hints(game->phase);
 }
 
 void dealer_turn(GameState *game) {
@@ -26,4 +28,5 @@ void finish_round(GameState *game) {
   game->phase = STATE_BETTING;
   erase();
   render_header(game->money, game->bet);
+  render_key_hints(game->phase);
 }

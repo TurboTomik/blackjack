@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added a hidden card for the dealer's first card, making the gameplay follow the standard Blackjack rules.
 - Added a 1.5x payout for a player Blackjack.
 - Players can now double their bet when they have exactly two cards and enough money.
+- Added a bottom key hints bar that displays the available controls for the current game phase, including betting, dealing, hitting, standing, doubling, and quitting.
 
 ### Changed
 

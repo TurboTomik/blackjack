@@ -3,6 +3,7 @@
 #include "input.h"
 #include "round.h"
 #include "ui_header.h"
+#include "ui_key_hints.h"
 #include <locale.h>
 #include <ncurses.h>
 #include <stdlib.h>
@@ -27,6 +28,7 @@ int main(void) {
 
   init_game_state(&game, INIT_MONEY, MIN_BET);
   render_header(game.money, game.bet);
+  render_key_hints(game.phase);
 
   while (running) {
     ch = getch();
