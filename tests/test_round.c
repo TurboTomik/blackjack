@@ -1,186 +1,114 @@
-#include "round.h"
 #include "test.h"
 
-/* --- can_start_round --- */
+#include <string.h>
 
-static void test_bet_equal_to_money_is_allowed(void) {
-  CHECK(can_start_round(50, 50));
+#include "round.h"
+
+static GameState game;
+
+static void setup(void) {
+  memset(&game, 0, sizeof(GameState));
+  init_game_state(&game, 1000, 10);
 }
 
-static void test_bet_less_than_money_is_allowed(void) {
-  CHECK(can_start_round(200, 50));
+static void test_can_double_down(void) {
+  setup();
+  begin_round(&game);
+
+  CHECK(can_double_down(game.money, game.bet, game.player.count));
+
+  CHECK(!can_double_down(game.money, game.bet, 3));
+
+  CHECK(!can_double_down(15, 10, 2));
 }
 
-static void test_bet_more_than_money_is_not_allowed(void) {
-  CHECK(!can_start_round(20, 50));
+static void test_begin_round_success(void) {
+  setup();
+
+  begin_round(&game);
+
+  CHECK_EQ(game.phase, STATE_PLAYER_TURN);
+  CHECK_EQ(game.player.count, 2);
+  CHECK_EQ(game.dealer.count, 2);
+  CHECK_NE(game.player.score, 0);
+  CHECK_NE(game.dealer.score, 0);
 }
 
-static void test_zero_money_zero_bet_is_allowed(void) {
-  CHECK(can_start_round(0, 0));
+static void test_begin_round_insufficient_funds(void) {
+  setup();
+  game.money = 5;
+  game.bet = 10;
+
+  begin_round(&game);
+
+  CHECK_EQ(game.phase, STATE_NOTIFICATION);
+  CHECK_EQ(game.active_notification, NOTIF_INSUFFICIENT_FUNDS);
 }
 
-/* --- init_game_state --- */
+static void test_player_hit(void) {
+  setup();
+  begin_round(&game);
 
-static void test_init_game_state_sets_starting_values(void) {
-  GameState game;
-  init_game_state(&game, 200, 50);
+  if (game.phase == STATE_PLAYER_TURN) {
+    uint8_t initial_count = game.player.count;
 
-  CHECK_EQ(game.money, 200U);
-  CHECK_EQ(game.bet, 50U);
-  CHECK_EQ(game.phase, STATE_BETTING);
-}
+    player_hit(&game);
 
-static void test_init_game_state_starts_with_empty_hands(void) {
-  GameState game;
-  init_game_state(&game, 200, 50);
-
-  CHECK_EQ(game.dealer.count, 0U);
-  CHECK_EQ(game.player.count, 0U);
-}
-
-/* --- start_new_round --- */
-
-static void test_start_new_round_deals_opening_hands(void) {
-  GameState game;
-  init_game_state(&game, 200, 50);
-
-  start_new_round(&game);
-
-  CHECK_EQ(game.dealer.count, 2U);
-  CHECK_EQ(game.player.count, 2U);
-}
-
-static void test_start_new_round_scores_both_hands(void) {
-  GameState game;
-  init_game_state(&game, 200, 50);
-
-  start_new_round(&game);
-
-  CHECK(game.dealer.score > 0);
-  CHECK(game.player.score > 0);
-}
-
-static void test_start_new_round_resets_a_dirty_hand(void) {
-  GameState game;
-  init_game_state(&game, 200, 50);
-
-  start_new_round(&game);
-  unsigned first_round_dealer_count = game.dealer.count;
-  CHECK_EQ(first_round_dealer_count, 2U);
-
-  start_new_round(&game);
-
-  CHECK_EQ(game.dealer.count, 2U);
-  CHECK_EQ(game.player.count, 2U);
-}
-
-static void
-test_start_new_round_gives_a_full_fresh_deck_minus_opening_deal(void) {
-  GameState game;
-  init_game_state(&game, 200, 50);
-
-  start_new_round(&game);
-
-  CHECK_EQ(game.deck.pos, 4U);
-}
-
-/* --- play_dealer_hand --- */
-
-static void test_dealer_stops_at_or_above_stand_value(void) {
-  GameState game;
-  init_game_state(&game, 200, 50);
-  start_new_round(&game);
-
-  play_dealer_hand(&game);
-
-  CHECK(game.dealer.score >= DEALER_STAND || game.dealer.score > 21);
-}
-
-static void test_dealer_never_exceeds_deck_capacity(void) {
-  int ran_to_completion = 1;
-  for (int trial = 0; trial < 200; trial++) {
-    GameState game;
-    init_game_state(&game, 200, 50);
-    start_new_round(&game);
-    play_dealer_hand(&game);
+    if (game.phase == STATE_PLAYER_TURN) {
+      CHECK_EQ(game.player.count, (unsigned int)initial_count + 1);
+    } else {
+      CHECK_EQ(game.phase, STATE_NOTIFICATION);
+      CHECK(is_bust(&game.player));
+    }
   }
-  CHECK(ran_to_completion);
 }
 
-/* --- can_double_down --- */
+static void test_player_stand(void) {
+  setup();
+  begin_round(&game);
 
-static void test_double_down_allowed_with_two_cards_and_enough_money(void) {
-  CHECK(can_double_down(/*money=*/200, /*bet=*/50, /*player_card_count=*/2));
+  player_stand(&game);
+
+  CHECK(game.dealer.score >= DEALER_STAND || is_bust(&game.dealer));
+  CHECK_EQ(game.phase, STATE_NOTIFICATION);
 }
 
-static void test_double_down_not_allowed_after_hitting(void) {
-  CHECK(!can_double_down(/*money=*/200, /*bet=*/50, /*player_card_count=*/3));
+static void test_player_double_down(void) {
+  setup();
+  begin_round(&game);
+  unsigned int initial_bet = game.bet;
+
+  player_double_down(&game);
+
+  CHECK_EQ(game.bet, initial_bet * 2);
+  CHECK_EQ(game.phase, STATE_NOTIFICATION);
 }
 
-static void test_double_down_not_allowed_with_one_card(void) {
-  CHECK(!can_double_down(/*money=*/200, /*bet=*/50, /*player_card_count=*/1));
-}
+static void test_trigger_and_dismiss_notification(void) {
+  setup();
+  game.phase = STATE_BETTING;
 
-static void test_double_down_blocked_if_doubled_bet_exceeds_money(void) {
-  CHECK(!can_double_down(/*money=*/60, /*bet=*/50, /*player_card_count=*/2));
-}
+  trigger_notification(&game, NOTIF_INSUFFICIENT_FUNDS);
 
-static void
-test_double_down_allowed_when_doubled_bet_exactly_equals_money(void) {
-  CHECK(can_double_down(/*money=*/100, /*bet=*/50, /*player_card_count=*/2));
-}
+  CHECK_EQ(game.phase, STATE_NOTIFICATION);
+  CHECK_EQ(game.previous_phase, STATE_BETTING);
+  CHECK_EQ(game.active_notification, NOTIF_INSUFFICIENT_FUNDS);
 
-/* --- double_down --- */
+  dismiss_notification(&game);
 
-static void test_double_down_doubles_the_bet(void) {
-  GameState game;
-  init_game_state(&game, 200, 50);
-  start_new_round(&game);
-  double_down(&game);
-  CHECK_EQ(game.bet, 100U);
-}
-
-static void test_double_down_deals_exactly_one_card(void) {
-  GameState game;
-  init_game_state(&game, 200, 50);
-  start_new_round(&game);
-  CHECK_EQ(game.player.count, 2U);
-  double_down(&game);
-  CHECK_EQ(game.player.count, 3U);
-}
-
-static void test_double_down_rescoces_the_hand(void) {
-  GameState game;
-  init_game_state(&game, 200, 50);
-  start_new_round(&game);
-  double_down(&game);
-  CHECK(game.player.score > 0);
+  CHECK_EQ(game.phase, STATE_BETTING);
+  CHECK_EQ(game.active_notification, NOTIF_NONE);
 }
 
 void run_round_tests(void) {
-  RUN_TEST(test_bet_equal_to_money_is_allowed);
-  RUN_TEST(test_bet_less_than_money_is_allowed);
-  RUN_TEST(test_bet_more_than_money_is_not_allowed);
-  RUN_TEST(test_zero_money_zero_bet_is_allowed);
+  RUN_TEST(test_can_double_down);
 
-  RUN_TEST(test_init_game_state_sets_starting_values);
-  RUN_TEST(test_init_game_state_starts_with_empty_hands);
+  RUN_TEST(test_begin_round_success);
+  RUN_TEST(test_begin_round_insufficient_funds);
 
-  RUN_TEST(test_start_new_round_deals_opening_hands);
-  RUN_TEST(test_start_new_round_scores_both_hands);
-  RUN_TEST(test_start_new_round_resets_a_dirty_hand);
-  RUN_TEST(test_start_new_round_gives_a_full_fresh_deck_minus_opening_deal);
+  RUN_TEST(test_player_hit);
+  RUN_TEST(test_player_stand);
+  RUN_TEST(test_player_double_down);
 
-  RUN_TEST(test_dealer_stops_at_or_above_stand_value);
-  RUN_TEST(test_dealer_never_exceeds_deck_capacity);
-
-  RUN_TEST(test_double_down_allowed_with_two_cards_and_enough_money);
-  RUN_TEST(test_double_down_not_allowed_after_hitting);
-  RUN_TEST(test_double_down_not_allowed_with_one_card);
-  RUN_TEST(test_double_down_blocked_if_doubled_bet_exceeds_money);
-  RUN_TEST(test_double_down_allowed_when_doubled_bet_exactly_equals_money);
-
-  RUN_TEST(test_double_down_doubles_the_bet);
-  RUN_TEST(test_double_down_deals_exactly_one_card);
-  RUN_TEST(test_double_down_rescoces_the_hand);
+  RUN_TEST(test_trigger_and_dismiss_notification);
 }

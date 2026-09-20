@@ -3,17 +3,18 @@
 
 #include "game.h"
 
-int can_start_round(unsigned money, unsigned bet);
-
 void init_game_state(GameState *game, unsigned starting_money,
                      unsigned starting_bet);
 
-void start_new_round(GameState *game);
-
-void play_dealer_hand(GameState *game);
-
 int can_double_down(unsigned money, unsigned bet, unsigned player_card_count);
 
-void double_down(GameState *game);
+void begin_round(GameState *game);
+
+void player_hit(GameState *game);
+void player_double_down(GameState *game);
+void player_stand(GameState *game);
+
+void trigger_notification(GameState *game, NotificationType type);
+void dismiss_notification(GameState *game);
 
 #endif // ROUND_H

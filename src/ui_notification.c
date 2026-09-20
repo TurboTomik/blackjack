@@ -2,27 +2,36 @@
 #include <ncurses.h>
 #include <string.h>
 
-#define WINDOW_HEIGH 6
-#define WINDOW_WIDTH 50
-
 static const char press_button_msg[] = "(Press any button to continue)";
 
-void display_notification(const char *text) {
-  WINDOW *window;
-  int pos_y;
-  int pos_x;
-  pos_y = (getmaxy(stdscr) - WINDOW_HEIGH) / 2;
-  pos_x = (getmaxx(stdscr) - WINDOW_WIDTH) / 2;
+static const char *notification_to_string(NotificationType type) {
+  switch (type) {
+  case NOTIF_INSUFFICIENT_FUNDS:
+    return "Not enough balance!";
+  case NOTIF_RESULT_PLAYER_WIN:
+    return "You win!";
+  case NOTIF_RESULT_DEALER_WIN:
+    return "Dealer wins.";
+  case NOTIF_RESULT_PUSH:
+    return "Push (Draw).";
+  case NOTIF_RESULT_BUST:
+    return "Bust! You lose.";
+  default:
+    return "";
+  }
+}
 
-  window = newwin(WINDOW_HEIGH, WINDOW_WIDTH, pos_y, pos_x);
-  box(window, 0, 0);
+void render_notification(WINDOW *win, NotificationType notification) {
+  const char *text = notification_to_string(notification);
+  if (!win || !text) {
+    return;
+  }
+  werase(win);
+  box(win, 0, 0);
 
-  mvwaddstr(window, 2, (WINDOW_WIDTH - strlen(text)) / 2, text);
-  mvwaddstr(window, 3, (WINDOW_WIDTH - strlen(press_button_msg)) / 2,
+  mvwaddstr(win, 2, (getmaxx(win) - strlen(text)) / 2, text);
+  mvwaddstr(win, 3, (getmaxx(win) - strlen(press_button_msg)) / 2,
             press_button_msg);
 
-  wnoutrefresh(window);
-  doupdate();
-  getch();
-  delwin(window);
+  wnoutrefresh(win);
 }

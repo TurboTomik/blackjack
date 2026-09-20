@@ -1,23 +1,11 @@
 #include "ui_playground.h"
 #include "card.h"
 #include "ui_card.h"
-#include "ui_notification.h"
 #include <ncurses.h>
 #include <string.h>
 
-static WINDOW *playground = NULL;
 static HandRenderer dealer_renderer = {0};
 static HandRenderer player_renderer = {0};
-
-static WINDOW *get_playground_window(void) {
-  if (!playground) {
-    playground = newwin(getmaxy(stdscr) - PLAYGROUND_MARGIN_BOT,
-                        getmaxx(stdscr), PLAYGROUND_BEGIN_LINE, 0);
-  } else {
-    werase(playground);
-  }
-  return playground;
-}
 
 static unsigned dealer_visible_score(const GameState *game, int hole_hidden) {
   if (hole_hidden && game->dealer.count > 1) {
@@ -57,30 +45,10 @@ static void draw_player_section(WINDOW *win, const GameState *game) {
 }
 
 void render_playground(const GameState *game, int hide_dealer_hole) {
-  WINDOW *win = get_playground_window();
+  werase(game->layout.playground);
 
-  draw_dealer_section(win, game, hide_dealer_hole);
-  draw_player_section(win, game);
+  draw_dealer_section(game->layout.playground, game, hide_dealer_hole);
+  draw_player_section(game->layout.playground, game);
 
-  wnoutrefresh(win);
-  doupdate();
-}
-
-void display_result(GameResult result) {
-  const char *msg;
-  switch (result) {
-  case RESULT_PLAYER_WIN:
-    msg = "You win!";
-    break;
-  case RESULT_DEALER_WIN:
-    msg = "Dealer wins.";
-    break;
-  case RESULT_PUSH:
-    msg = "Push.";
-    break;
-  default:
-    msg = "";
-  }
-  display_notification(msg);
-  wnoutrefresh(stdscr);
+  wnoutrefresh(game->layout.playground);
 }

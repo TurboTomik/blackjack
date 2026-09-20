@@ -3,13 +3,19 @@
 
 #include "deck.h"
 #include "hand.h"
+#include "layout.h"
+#include "result.h"
+#include "ui_notification.h"
 
 #define INIT_MONEY 200
 #define DEALER_STAND 17
 
 typedef enum {
   STATE_BETTING,
-  STATE_PLAYING,
+  STATE_PLAYER_TURN,
+  STATE_DEALER_TURN,
+  STATE_FINISHED,
+  STATE_NOTIFICATION,
 } GamePhase;
 
 typedef struct {
@@ -22,10 +28,12 @@ typedef struct {
   unsigned bet;
 
   GamePhase phase;
-} GameState;
+  GamePhase previous_phase;
 
-void dealer_turn(GameState *game);
-void begin_round(GameState *game);
-void finish_round(GameState *game);
+  GameLayout layout;
+
+  GameResult last_result;
+  NotificationType active_notification;
+} GameState;
 
 #endif // !GAME_H

@@ -9,6 +9,6 @@ typedef struct {
   const char *action;
 } KeyHint;
 
-void render_key_hints(GamePhase phase);
+void render_key_hints(WINDOW *win, GamePhase phase);
 
 #endif // !UI_HINTS_H

@@ -17,6 +17,6 @@
 #define PLAYER_SCORE_LINE (PLAYER_LABEL_LINE + CARD_HEIGH + 1)
 
 void render_playground(const GameState *game, int hide_dealer_hole);
-void display_result(GameResult result);
+void display_result(WINDOW *popup, GameResult result);
 
 #endif // !UI_PLAYGROUND_H

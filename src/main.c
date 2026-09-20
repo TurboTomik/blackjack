@@ -1,9 +1,9 @@
 #include "bet.h"
 #include "game.h"
 #include "input.h"
+#include "layout.h"
 #include "round.h"
-#include "ui_header.h"
-#include "ui_key_hints.h"
+#include "ui.h"
 #include <locale.h>
 #include <ncurses.h>
 #include <stdlib.h>
@@ -25,12 +25,12 @@ int main(void) {
 
   initialization();
   srand(time(NULL));
-
   init_game_state(&game, INIT_MONEY, MIN_BET);
-  render_header(game.money, game.bet);
-  render_key_hints(game.phase);
+  init_layout(&game.layout);
 
   while (running) {
+    render_game(&game);
+
     ch = getch();
 
     if (ch == 'q') {
@@ -42,12 +42,19 @@ int main(void) {
     case STATE_BETTING:
       handle_betting_input(&game, ch);
       break;
-    case STATE_PLAYING:
+    case STATE_PLAYER_TURN:
       handle_player_input(&game, ch);
+      break;
+    case STATE_NOTIFICATION:
+      handle_result_input(&game, ch);
+      break;
+    case STATE_DEALER_TURN:
+    case STATE_FINISHED:
       break;
     }
   }
 
+  free_layout(&game.layout);
   endwin();
   return 0;
 }

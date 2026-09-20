@@ -5,7 +5,7 @@ static const char msg_balance[] = "Balance: ";
 static const char msg_bet[] = "Bet: ";
 
 static void draw_balance(unsigned money) {
-  mvprintw(0, 0, "%s%d$    ", msg_balance, money);
+  mvprintw(0, 0, "%s%d$", msg_balance, money);
 }
 
 static void draw_bet(unsigned bet) {
@@ -16,18 +16,14 @@ static void draw_bet(unsigned bet) {
   int x = getmaxx(stdscr);
   int center_posx = (x - len) / 2;
 
-  mvprintw(0, center_posx, "%s  ", buf);
+  mvprintw(0, center_posx, "%s", buf);
 }
 
-void render_header(unsigned money, unsigned bet) {
+void render_header(WINDOW *win, unsigned money, unsigned bet) {
+  werase(win);
+
   draw_balance(money);
   draw_bet(bet);
-  wnoutrefresh(stdscr);
-  doupdate();
-}
 
-void render_bet(unsigned bet) {
-  draw_bet(bet);
-  wnoutrefresh(stdscr);
-  doupdate();
+  wnoutrefresh(win);
 }

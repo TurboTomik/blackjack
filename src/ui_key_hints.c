@@ -6,8 +6,6 @@
 #include <stdio.h>
 #include <string.h>
 
-static WINDOW *key_hits_win = NULL;
-
 static const KeyHint bet_key = {"Up/Down", "Bet"};
 static const KeyHint deal_key = {"Enter/Space", "Deal"};
 static const KeyHint quit_key = {"q", "Quit"};
@@ -18,7 +16,8 @@ static const KeyHint double_key = {"d", "Double"};
 static const char KEY_HINT_FORMAT[] = "[%s] %s";
 static const char SEPARATOR[] = " | ";
 
-static int find_start_posx(const KeyHint *hints, size_t hint_count) {
+static int find_start_posx(WINDOW *win, const KeyHint *hints,
+                           size_t hint_count) {
   size_t hints_len = 0;
   for (size_t i = 0; i < hint_count; i++) {
     hints_len +=
@@ -27,12 +26,18 @@ static int find_start_posx(const KeyHint *hints, size_t hint_count) {
       hints_len += strlen(SEPARATOR);
     }
   }
-  return ((getmaxx(key_hits_win) - (int)hints_len) / 2);
+  return ((getmaxx(win) - (int)hints_len) / 2);
 }
 
-static void draw_key_hints(const GamePhase phase) {
-  const KeyHint *hints;
-  size_t hint_count;
+void render_key_hints(WINDOW *win, GamePhase phase) {
+  if (!win) {
+    return;
+  }
+
+  werase(win);
+
+  const KeyHint *hints = NULL;
+  size_t hint_count = 0;
 
   switch (phase) {
   case STATE_BETTING: {
@@ -42,7 +47,7 @@ static void draw_key_hints(const GamePhase phase) {
     hint_count = sizeof(betting_hints) / sizeof(betting_hints[0]);
     break;
   }
-  case STATE_PLAYING: {
+  case STATE_PLAYER_TURN: {
     static const KeyHint playing_hints[] = {hit_key, stand_key, double_key};
 
     hints = playing_hints;
@@ -50,33 +55,24 @@ static void draw_key_hints(const GamePhase phase) {
     break;
   }
   default:
-    return;
+    break;
   }
 
-  int start_posx = find_start_posx(hints, hint_count);
+  if (hints && hint_count > 0) {
+    int start_posx = find_start_posx(win, hints, hint_count);
+    if (start_posx < 0) {
+      start_posx = 0;
+    }
 
-  wmove(key_hits_win, 0, start_posx);
+    wmove(win, 0, start_posx);
 
-  for (size_t i = 0; i < hint_count; i++) {
-    wprintw(key_hits_win, KEY_HINT_FORMAT, hints[i].keys, hints[i].action);
-    if (i < hint_count - 1) {
-      waddstr(key_hits_win, SEPARATOR);
+    for (size_t i = 0; i < hint_count; i++) {
+      wprintw(win, KEY_HINT_FORMAT, hints[i].keys, hints[i].action);
+      if (i < hint_count - 1) {
+        waddstr(win, SEPARATOR);
+      }
     }
   }
-}
 
-static void get_key_hints_win(void) {
-  if (!key_hits_win) {
-    key_hits_win = newwin(1, COLS, LINES - 1, 0);
-  } else {
-    werase(key_hits_win);
-  }
-}
-
-void render_key_hints(GamePhase phase) {
-  get_key_hints_win();
-  draw_key_hints(phase);
-
-  wnoutrefresh(key_hits_win);
-  doupdate();
+  wnoutrefresh(win);
 }

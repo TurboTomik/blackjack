@@ -1,7 +1,7 @@
 #ifndef UI_HEADER_H
 #define UI_HEADER_H
 
-void render_header(unsigned money, unsigned bet);
-void render_bet(unsigned bet);
+#include <ncurses.h>
+void render_header(WINDOW *win, unsigned money, unsigned bet);
 
 #endif // !UI_HEADER_H

@@ -5,6 +5,6 @@
 
 void handle_betting_input(GameState *game, int ch);
 void handle_player_input(GameState *game, int ch);
-void handle_round_over_input(GameState *game, int ch);
+void handle_result_input(GameState *game, int ch);
 
 #endif // !INPUT_H
