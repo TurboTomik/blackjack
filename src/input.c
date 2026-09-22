@@ -5,6 +5,7 @@
 #include "bet.h"
 #include "game.h"
 #include "round.h"
+#include "ui.h"
 
 void handle_betting_input(GameState *game, int ch) {
   switch (ch) {
@@ -47,3 +48,5 @@ void handle_result_input(GameState *game, int ch) {
   (void)ch;
   dismiss_notification(game);
 }
+
+void handle_resize(GameState *game) { resize_game(game); }

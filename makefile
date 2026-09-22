@@ -19,7 +19,8 @@ LOGIC_SOURCES := $(SRC_DIR)/card.c \
                  $(SRC_DIR)/bet.c \
                  $(SRC_DIR)/result.c \
 								 $(SRC_DIR)/round.c \
-								 $(SRC_DIR)/input.c
+								 $(SRC_DIR)/input.c \
+								 $(TESTS_DIR)/mock_ui.c
 TEST_SOURCES := $(wildcard $(TESTS_DIR)/*.c)
 
 CC = gcc

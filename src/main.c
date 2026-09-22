@@ -38,6 +38,11 @@ int main(void) {
       continue;
     }
 
+    if (ch == KEY_RESIZE) {
+      handle_resize(&game);
+      continue;
+    }
+
     switch (game.phase) {
     case STATE_BETTING:
       handle_betting_input(&game, ch);

@@ -4,5 +4,6 @@
 #include "game.h"
 
 void render_game(const GameState *game);
+void resize_game(GameState *game);
 
 #endif // !UI_H

@@ -1,5 +1,6 @@
 #include "ui.h"
 #include "game.h"
+#include "layout.h"
 #include "ui_header.h"
 #include "ui_key_hints.h"
 #include "ui_notification.h"
@@ -34,4 +35,9 @@ void render_game(const GameState *game) {
   }
 
   doupdate();
+}
+
+void resize_game(GameState *game) {
+  init_layout(&game->layout);
+  render_game(game);
 }
