@@ -65,25 +65,25 @@ static void test_equal_scores_are_a_push(void) {
 static void test_apply_result_player_win_adds_bet(void) {
   unsigned money = 200;
   apply_result(&money, 50, RESULT_PLAYER_WIN);
-  CHECK_EQ(money, 250U);
+  CHECK_EQ(money, 300U);
 }
 
 static void test_apply_result_dealer_win_subtracts_bet(void) {
   unsigned money = 200;
   apply_result(&money, 50, RESULT_DEALER_WIN);
-  CHECK_EQ(money, 150U);
+  CHECK_EQ(money, 200U);
 }
 
 static void test_apply_result_push_leaves_money_unchanged(void) {
   unsigned money = 200;
   apply_result(&money, 50, RESULT_PUSH);
-  CHECK_EQ(money, 200U);
+  CHECK_EQ(money, 250U);
 }
 
 static void test_apply_result_player_win_blackjack(void) {
   unsigned money = 200;
   apply_result(&money, 50, RESULT_BLACKJACK);
-  CHECK_EQ(money, 275U);
+  CHECK_EQ(money, 325U);
 }
 
 void run_result_tests(void) {

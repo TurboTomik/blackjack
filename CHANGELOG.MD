@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Added a hidden card for the dealer's first card, making the gameplay follow the standard Blackjack rules.
-- Added a 1.5x payout for a player Blackjack.
+- Added a 2.5x payout for a player Blackjack.
 - Players can now double their bet when they have exactly two cards and enough money.
 - Added a bottom key hints bar that displays the available controls for the current game phase, including betting, dealing, hitting, standing, doubling, and quitting.
 - Added support for resizing the terminal during gameplay. The UI now automatically recalculates its layout and redraws when the terminal size changes.
@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Prevented a new round from starting when the bet exceeds the player's available money.
 - Player Blackjack is now distinguished from a regular win.
 - A player and dealer Blackjack now results in a push.
+- Updated the betting and payout system. The bet is now deducted when a round starts and returned according to the round result.
 
 ## [0.1.1]
 

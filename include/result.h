@@ -3,7 +3,7 @@
 
 #include "hand.h"
 
-#define BLACKJACK_COEFFICIENT 1.5
+#define BLACKJACK_COEFFICIENT 2.5
 
 typedef enum {
   RESULT_PLAYER_WIN,

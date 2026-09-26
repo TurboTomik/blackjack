@@ -65,6 +65,7 @@ void begin_round(GameState *game) {
     trigger_notification(game, NOTIF_INSUFFICIENT_FUNDS);
     return;
   }
+  game->money -= game->bet;
   game->phase = STATE_PLAYER_TURN;
   prepare_round(game);
 }

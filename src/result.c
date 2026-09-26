@@ -23,15 +23,15 @@ GameResult determine_winner(Hand *dealer_hand, Hand *player_hand) {
 void apply_result(unsigned *money, unsigned bet, GameResult result) {
   switch (result) {
   case RESULT_PLAYER_WIN:
-    *money += bet;
+    *money += bet * 2;
     break;
   case RESULT_DEALER_WIN:
-    *money -= bet;
     break;
   case RESULT_BLACKJACK:
     *money += (int)(bet * BLACKJACK_COEFFICIENT);
     break;
   case RESULT_PUSH:
+    *money += bet;
     break;
   }
 }
