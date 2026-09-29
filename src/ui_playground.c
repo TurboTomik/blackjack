@@ -7,20 +7,21 @@
 static HandRenderer dealer_renderer = {0};
 static HandRenderer player_renderer = {0};
 
-static unsigned dealer_visible_score(const GameState *game, int hole_hidden) {
+static unsigned dealer_visible_score(const GameState *game,
+                                     const int hole_hidden) {
   if (hole_hidden && game->dealer.count > 1) {
     return card_value(game->dealer.cards[1].rank);
   }
   return game->dealer.score;
 }
 
-static void draw_label(WINDOW *win, int line, const char *label) {
+static void draw_label(WINDOW *win, const int line, const char *label) {
   int x = (getmaxx(win) / 2) - (int)(strlen(label) / 2);
 
   mvwprintw(win, line, x, "%s", label);
 }
 
-static void draw_score(WINDOW *win, int line, unsigned score) {
+static void draw_score(WINDOW *win, const int line, const unsigned score) {
   enum { SCORE_TEXT_SIZE = 32 };
   char buf[SCORE_TEXT_SIZE];
   snprintf(buf, sizeof buf, "%2d points", score);
@@ -30,7 +31,7 @@ static void draw_score(WINDOW *win, int line, unsigned score) {
 }
 
 static void draw_dealer_section(WINDOW *win, const GameState *game,
-                                int hole_hidden) {
+                                const int hole_hidden) {
   draw_label(win, DEALER_LABEL_LINE, DEALER_LABEL);
   draw_hand_cards(&dealer_renderer, win, &game->dealer, DEALER_LABEL_LINE + 1,
                   hole_hidden);
@@ -44,7 +45,7 @@ static void draw_player_section(WINDOW *win, const GameState *game) {
   draw_score(win, PLAYER_SCORE_LINE, game->player.score);
 }
 
-void render_playground(const GameState *game, int hide_dealer_hole) {
+void render_playground(const GameState *game, const int hide_dealer_hole) {
   werase(game->layout.playground);
 
   draw_dealer_section(game->layout.playground, game, hide_dealer_hole);

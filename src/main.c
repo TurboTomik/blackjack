@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-void initialization() {
+static void initialization() {
   setlocale(LC_ALL, "");
   initscr();
   curs_set(0);

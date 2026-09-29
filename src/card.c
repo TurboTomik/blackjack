@@ -1,6 +1,6 @@
 #include "card.h"
 
-int card_value(Rank rank) {
+int card_value(const Rank rank) {
   if (rank >= TEN) {
     return MAX_CARD_VALUE;
   }

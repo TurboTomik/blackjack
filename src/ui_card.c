@@ -1,7 +1,7 @@
 #include "ui_card.h"
 #include <ncurses.h>
 
-static const char *rank_name(Rank rank) {
+static const char *rank_name(const Rank rank) {
   switch (rank) {
   case ACE:
     return "A";
@@ -19,7 +19,7 @@ static const char *rank_name(Rank rank) {
   }
 }
 
-static const char *suit_symbol(Suit suit) {
+static const char *suit_symbol(const Suit suit) {
   switch (suit) {
   case HEARTS:
     return "♥";
@@ -33,8 +33,8 @@ static const char *suit_symbol(Suit suit) {
   return "?";
 }
 
-static WINDOW *draw_card(WINDOW *orig, int begin_y, int begin_x, Rank rank,
-                         Suit suit) {
+static WINDOW *draw_card(WINDOW *orig, const int begin_y, const int begin_x,
+                         const Rank rank, const Suit suit) {
   WINDOW *card = derwin(orig, CARD_HEIGH, CARD_WIDTH, begin_y, begin_x);
   box(card, 0, 0);
   mvwprintw(card, CARD_PADDING, CARD_PADDING, "%s%s", rank_name(rank),
@@ -45,7 +45,8 @@ static WINDOW *draw_card(WINDOW *orig, int begin_y, int begin_x, Rank rank,
   return card;
 }
 
-static WINDOW *draw_card_back(WINDOW *orig, int begin_y, int begin_x) {
+static WINDOW *draw_card_back(WINDOW *orig, const int begin_y,
+                              const int begin_x) {
   WINDOW *card = derwin(orig, CARD_HEIGH, CARD_WIDTH, begin_y, begin_x);
   box(card, 0, 0);
   for (int y = 1; y < CARD_HEIGH - 1; y++) {
@@ -66,7 +67,7 @@ static void clear_card_windows(HandRenderer *renderer) {
 }
 
 void draw_hand_cards(HandRenderer *renderer, WINDOW *orig, const Hand *hand,
-                     int line, int hide_first) {
+                     const int line, const int hide_first) {
   clear_card_windows(renderer);
 
   int row_width = CARD_WIDTH * (int)hand->count;

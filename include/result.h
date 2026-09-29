@@ -12,7 +12,7 @@ typedef enum {
   RESULT_PUSH
 } GameResult;
 
-GameResult determine_winner(Hand *dealer_hand, Hand *player_hand);
+GameResult determine_winner(const Hand *dealer_hand, const Hand *player_hand);
 void apply_result(unsigned *money, unsigned bet, GameResult result);
 
 #endif // !RESULT_H

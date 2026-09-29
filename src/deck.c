@@ -16,7 +16,7 @@ void build_deck(Deck *deck) {
 void shuffle_deck(Deck *deck) {
   for (int i = DECK_SIZE - 1; i > 0; i--) {
     int j = rand() % (i + 1);
-    Card tmp = deck->cards[i];
+    const Card tmp = deck->cards[i];
     deck->cards[i] = deck->cards[j];
     deck->cards[j] = tmp;
   }

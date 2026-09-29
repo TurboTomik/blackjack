@@ -4,11 +4,11 @@
 static const char msg_balance[] = "Balance: ";
 static const char msg_bet[] = "Bet: ";
 
-static void draw_balance(unsigned money) {
+static void draw_balance(const unsigned money) {
   mvprintw(0, 0, "%s%d$", msg_balance, money);
 }
 
-static void draw_bet(unsigned bet) {
+static void draw_bet(const unsigned bet) {
   enum { HEADER_BUFFER_SIZE = 32 };
 
   char buf[HEADER_BUFFER_SIZE];
@@ -19,7 +19,7 @@ static void draw_bet(unsigned bet) {
   mvprintw(0, center_posx, "%s", buf);
 }
 
-void render_header(WINDOW *win, unsigned money, unsigned bet) {
+void render_header(WINDOW *win, const unsigned money, const unsigned bet) {
   werase(win);
 
   draw_balance(money);

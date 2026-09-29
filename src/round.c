@@ -5,12 +5,12 @@
 #include "ui_notification.h"
 #include <string.h>
 
-static int can_start_round(unsigned int money, unsigned int bet) {
+static int can_start_round(const unsigned int money, const unsigned int bet) {
   return bet <= money;
 }
 
-void init_game_state(GameState *game, unsigned int starting_money,
-                     unsigned int starting_bet) {
+void init_game_state(GameState *game, const unsigned int starting_money,
+                     const unsigned int starting_bet) {
   memset(game, 0, sizeof *game);
   game->money = starting_money;
   game->bet = starting_bet;
@@ -49,8 +49,8 @@ static void play_dealer_hand(GameState *game) {
   }
 }
 
-int can_double_down(unsigned int money, unsigned int bet,
-                    unsigned int player_card_count) {
+int can_double_down(const unsigned int money, const unsigned int bet,
+                    const unsigned int player_card_count) {
   return player_card_count == 2 && can_start_round(money, bet * 2);
 }
 

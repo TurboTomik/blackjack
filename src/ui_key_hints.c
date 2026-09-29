@@ -6,18 +6,18 @@
 #include <stdio.h>
 #include <string.h>
 
-static const KeyHint bet_key = {"Up/Down", "Bet"};
-static const KeyHint deal_key = {"Enter/Space", "Deal"};
-static const KeyHint quit_key = {"q", "Quit"};
-static const KeyHint hit_key = {"h", "Hit"};
-static const KeyHint stand_key = {"Space", "Stand"};
-static const KeyHint double_key = {"d", "Double"};
+static const KeyHint bet_key = {.keys = "Up/Down", .action = "Bet"};
+static const KeyHint deal_key = {.keys = "Enter/Space", .action = "Deal"};
+static const KeyHint quit_key = {.keys = "q", .action = "Quit"};
+static const KeyHint hit_key = {.keys = "h", .action = "Hit"};
+static const KeyHint stand_key = {.keys = "Space", .action = "Stand"};
+static const KeyHint double_key = {.keys = "d", .action = "Double"};
 
 static const char KEY_HINT_FORMAT[] = "[%s] %s";
 static const char SEPARATOR[] = " | ";
 
-static int find_start_posx(WINDOW *win, const KeyHint *hints,
-                           size_t hint_count) {
+static int find_start_posx(const WINDOW *win, const KeyHint *hints,
+                           const size_t hint_count) {
   size_t hints_len = 0;
   for (size_t i = 0; i < hint_count; i++) {
     hints_len +=
@@ -29,7 +29,7 @@ static int find_start_posx(WINDOW *win, const KeyHint *hints,
   return ((getmaxx(win) - (int)hints_len) / 2);
 }
 
-void render_key_hints(WINDOW *win, GamePhase phase) {
+void render_key_hints(WINDOW *win, const GamePhase phase) {
   if (!win) {
     return;
   }

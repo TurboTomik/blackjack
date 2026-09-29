@@ -7,7 +7,7 @@
 #include "round.h"
 #include "ui.h"
 
-void handle_betting_input(GameState *game, int ch) {
+void handle_betting_input(GameState *game, const int ch) {
   switch (ch) {
   case KEY_UP:
     bet_increase(&game->bet);
@@ -25,7 +25,7 @@ void handle_betting_input(GameState *game, int ch) {
   }
 }
 
-void handle_player_input(GameState *game, int ch) {
+void handle_player_input(GameState *game, const int ch) {
   switch (ch) {
   case 'h':
     player_hit(game);
@@ -44,7 +44,7 @@ void handle_player_input(GameState *game, int ch) {
   }
 }
 
-void handle_result_input(GameState *game, int ch) {
+void handle_result_input(GameState *game, const int ch) {
   (void)ch;
   dismiss_notification(game);
 }

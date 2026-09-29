@@ -1,7 +1,7 @@
 #include "result.h"
 #include "hand.h"
 
-GameResult determine_winner(Hand *dealer_hand, Hand *player_hand) {
+GameResult determine_winner(const Hand *dealer_hand, const Hand *player_hand) {
   if (is_bust(player_hand)) {
     return RESULT_DEALER_WIN;
   }
@@ -20,7 +20,8 @@ GameResult determine_winner(Hand *dealer_hand, Hand *player_hand) {
   return RESULT_PUSH;
 }
 
-void apply_result(unsigned *money, unsigned bet, GameResult result) {
+void apply_result(unsigned *money, const unsigned bet,
+                  const GameResult result) {
   switch (result) {
   case RESULT_PLAYER_WIN:
     *money += bet * 2;

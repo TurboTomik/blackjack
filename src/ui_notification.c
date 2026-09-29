@@ -4,7 +4,7 @@
 
 static const char press_button_msg[] = "(Press any button to continue)";
 
-static const char *notification_to_string(NotificationType type) {
+static const char *notification_to_string(const NotificationType type) {
   switch (type) {
   case NOTIF_INSUFFICIENT_FUNDS:
     return "Not enough balance!";
@@ -21,7 +21,7 @@ static const char *notification_to_string(NotificationType type) {
   }
 }
 
-void render_notification(WINDOW *win, NotificationType notification) {
+void render_notification(WINDOW *win, const NotificationType notification) {
   const char *text = notification_to_string(notification);
   if (!win || !text) {
     return;
