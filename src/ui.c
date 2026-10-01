@@ -23,15 +23,13 @@ void render_game(const GameState *game) {
     break;
 
   case STATE_DEALER_TURN:
-    render_playground(game, 0);
-    break;
   case STATE_FINISHED:
-    break;
-
-  case STATE_NOTIFICATION:
     render_playground(game, 0);
-    render_notification(game->layout.popup, game->active_notification);
     break;
+  }
+
+  if (game->active_notification != NOTIF_NONE) {
+    render_notification(game->layout.popup, game->active_notification);
   }
 
   doupdate();

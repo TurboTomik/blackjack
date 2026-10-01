@@ -4,6 +4,7 @@
 #include "layout.h"
 #include "round.h"
 #include "ui.h"
+#include "ui_notification.h"
 #include <locale.h>
 #include <ncurses.h>
 #include <stdlib.h>
@@ -43,6 +44,11 @@ int main(void) {
       continue;
     }
 
+    if (game.active_notification != NOTIF_NONE) {
+      (void)ch;
+      dismiss_notification(&game);
+    }
+
     switch (game.phase) {
     case STATE_BETTING:
       handle_betting_input(&game, ch);
@@ -50,12 +56,9 @@ int main(void) {
     case STATE_PLAYER_TURN:
       handle_player_input(&game, ch);
       break;
-    case STATE_NOTIFICATION:
-      handle_result_input(&game, ch);
-      break;
     case STATE_DEALER_TURN:
     case STATE_FINISHED:
-      break;
+      start_betting(&game);
     }
   }
 

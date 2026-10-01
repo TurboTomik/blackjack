@@ -23,6 +23,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - A player and dealer Blackjack now results in a push.
 - Updated the betting and payout system. The bet is now deducted when a round starts and returned according to the round result.
 
+### Fixed
+
+- Fixed an issue where the game field was not displayed while showing the result of a completed round. The final hands are now visible together with the result notification.
+
 ## [0.1.1]
 
 ### Added

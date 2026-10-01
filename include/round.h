@@ -5,6 +5,7 @@
 
 void init_game_state(GameState *game, unsigned starting_money,
                      unsigned starting_bet);
+void start_betting(GameState *game);
 
 int can_double_down(unsigned money, unsigned bet, unsigned player_card_count);
 

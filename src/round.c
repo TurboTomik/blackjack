@@ -9,14 +9,6 @@ static int can_start_round(const unsigned int money, const unsigned int bet) {
   return bet <= money;
 }
 
-void init_game_state(GameState *game, const unsigned int starting_money,
-                     const unsigned int starting_bet) {
-  memset(game, 0, sizeof *game);
-  game->money = starting_money;
-  game->bet = starting_bet;
-  game->phase = STATE_BETTING;
-}
-
 static void reset_hand(Hand *hand) { memset(hand, 0, sizeof *hand); }
 
 static void deal_opening_hands(GameState *game) {
@@ -49,6 +41,19 @@ static void play_dealer_hand(GameState *game) {
   }
 }
 
+static void change_game_phase(GameState *game, const GamePhase new_phase) {
+  game->previous_phase = game->phase;
+  game->phase = new_phase;
+}
+
+void init_game_state(GameState *game, const unsigned int starting_money,
+                     const unsigned int starting_bet) {
+  memset(game, 0, sizeof *game);
+  game->money = starting_money;
+  game->bet = starting_bet;
+  change_game_phase(game, STATE_BETTING);
+}
+
 int can_double_down(const unsigned int money, const unsigned int bet,
                     const unsigned int player_card_count) {
   return player_card_count == 2 && can_start_round(money, bet * 2);
@@ -60,13 +65,21 @@ static void double_down(GameState *game) {
   calculate_hand_score(&game->player);
 }
 
+void start_betting(GameState *game) {
+  if (game->bet > game->money) {
+    game->bet = game->money;
+  }
+  change_game_phase(game, STATE_BETTING);
+}
+
 void begin_round(GameState *game) {
   if (!can_start_round(game->money, game->bet)) {
     trigger_notification(game, NOTIF_INSUFFICIENT_FUNDS);
     return;
   }
   game->money -= game->bet;
-  game->phase = STATE_PLAYER_TURN;
+  change_game_phase(game, STATE_PLAYER_TURN);
+
   prepare_round(game);
 }
 
@@ -74,8 +87,7 @@ static void finish_round(GameState *game) {
   GameResult result = determine_winner(&game->dealer, &game->player);
   apply_result(&game->money, game->bet, result);
 
-  game->phase = STATE_BETTING;
-
+  change_game_phase(game, STATE_FINISHED);
   if (result == RESULT_PLAYER_WIN || result == RESULT_BLACKJACK) {
     trigger_notification(game, NOTIF_RESULT_PLAYER_WIN);
   } else if (result == RESULT_DEALER_WIN) {
@@ -116,11 +128,8 @@ void player_stand(GameState *game) {
 
 void trigger_notification(GameState *game, NotificationType type) {
   game->active_notification = type;
-  game->previous_phase = game->phase;
-  game->phase = STATE_NOTIFICATION;
 }
 
 void dismiss_notification(GameState *game) {
-  game->phase = game->previous_phase;
   game->active_notification = NOTIF_NONE;
 }

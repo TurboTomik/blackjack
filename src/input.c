@@ -44,9 +44,4 @@ void handle_player_input(GameState *game, const int ch) {
   }
 }
 
-void handle_result_input(GameState *game, const int ch) {
-  (void)ch;
-  dismiss_notification(game);
-}
-
 void handle_resize(GameState *game) { resize_game(game); }

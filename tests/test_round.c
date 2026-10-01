@@ -1,3 +1,4 @@
+#include "game.h"
 #include "test.h"
 
 #include <string.h>
@@ -41,7 +42,7 @@ static void test_begin_round_insufficient_funds(void) {
 
   begin_round(&game);
 
-  CHECK_EQ(game.phase, STATE_NOTIFICATION);
+  CHECK_EQ(game.phase, STATE_BETTING);
   CHECK_EQ(game.active_notification, NOTIF_INSUFFICIENT_FUNDS);
 }
 
@@ -57,7 +58,7 @@ static void test_player_hit(void) {
     if (game.phase == STATE_PLAYER_TURN) {
       CHECK_EQ(game.player.count, (unsigned int)initial_count + 1);
     } else {
-      CHECK_EQ(game.phase, STATE_NOTIFICATION);
+      CHECK_EQ(game.phase, STATE_FINISHED);
       CHECK(is_bust(&game.player));
     }
   }
@@ -70,7 +71,7 @@ static void test_player_stand(void) {
   player_stand(&game);
 
   CHECK(game.dealer.score >= DEALER_STAND || is_bust(&game.dealer));
-  CHECK_EQ(game.phase, STATE_NOTIFICATION);
+  CHECK_EQ(game.phase, STATE_FINISHED);
 }
 
 static void test_player_double_down(void) {
@@ -81,7 +82,7 @@ static void test_player_double_down(void) {
   player_double_down(&game);
 
   CHECK_EQ(game.bet, initial_bet * 2);
-  CHECK_EQ(game.phase, STATE_NOTIFICATION);
+  CHECK_EQ(game.phase, STATE_FINISHED);
 }
 
 static void test_trigger_and_dismiss_notification(void) {
@@ -90,7 +91,7 @@ static void test_trigger_and_dismiss_notification(void) {
 
   trigger_notification(&game, NOTIF_INSUFFICIENT_FUNDS);
 
-  CHECK_EQ(game.phase, STATE_NOTIFICATION);
+  CHECK_EQ(game.phase, STATE_BETTING);
   CHECK_EQ(game.previous_phase, STATE_BETTING);
   CHECK_EQ(game.active_notification, NOTIF_INSUFFICIENT_FUNDS);
 

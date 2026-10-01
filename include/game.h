@@ -15,7 +15,6 @@ typedef enum {
   STATE_PLAYER_TURN,
   STATE_DEALER_TURN,
   STATE_FINISHED,
-  STATE_NOTIFICATION,
 } GamePhase;
 
 typedef struct {

@@ -85,7 +85,7 @@ static void test_player_input_stand_finishes_turn(void) {
 
   handle_player_input(&game, ' ');
 
-  CHECK_EQ(game.phase, STATE_NOTIFICATION);
+  CHECK_EQ(game.phase, STATE_FINISHED);
   CHECK(game.dealer.score >= 17 || is_bust(&game.dealer));
 }
 
@@ -97,7 +97,7 @@ static void test_player_input_double_success(void) {
 
   CHECK_EQ(game.bet, MIN_BET * 2);
   CHECK_EQ(game.player.count, 3);
-  CHECK_EQ(game.phase, STATE_NOTIFICATION);
+  CHECK_EQ(game.phase, STATE_FINISHED);
 }
 
 static void test_player_input_double_insufficient_funds(void) {
@@ -109,18 +109,6 @@ static void test_player_input_double_insufficient_funds(void) {
   CHECK_EQ(game.bet, 50);
   CHECK_EQ(game.player.count, 2);
   CHECK_EQ(game.phase, STATE_PLAYER_TURN);
-}
-
-static void test_result_input_dismiss(void) {
-  setup_game(1000, MIN_BET);
-  game.phase = STATE_NOTIFICATION;
-  game.previous_phase = STATE_BETTING;
-  game.active_notification = NOTIF_RESULT_PLAYER_WIN;
-
-  handle_result_input(&game, 'a');
-
-  CHECK_EQ(game.phase, STATE_BETTING);
-  CHECK_EQ(game.active_notification, NOTIF_NONE);
 }
 
 void run_input_tests(void) {
@@ -135,6 +123,4 @@ void run_input_tests(void) {
   RUN_TEST(test_player_input_stand_finishes_turn);
   RUN_TEST(test_player_input_double_success);
   RUN_TEST(test_player_input_double_insufficient_funds);
-
-  RUN_TEST(test_result_input_dismiss);
 }
