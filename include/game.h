@@ -26,6 +26,8 @@ typedef struct {
   unsigned money;
   unsigned bet;
 
+  char is_double;
+
   GamePhase phase;
   GamePhase previous_phase;
 

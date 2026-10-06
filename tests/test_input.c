@@ -95,7 +95,7 @@ static void test_player_input_double_success(void) {
 
   handle_player_input(&game, 'd');
 
-  CHECK_EQ(game.bet, MIN_BET * 2);
+  CHECK_EQ(game.bet, MIN_BET);
   CHECK_EQ(game.player.count, 3);
   CHECK_EQ(game.phase, STATE_FINISHED);
 }

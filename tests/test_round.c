@@ -20,7 +20,7 @@ static void test_can_double_down(void) {
 
   CHECK(!can_double_down(game.money, game.bet, 3));
 
-  CHECK(!can_double_down(15, 10, 2));
+  CHECK(!can_double_down(9, 10, 2));
 }
 
 static void test_begin_round_success(void) {
@@ -81,7 +81,7 @@ static void test_player_double_down(void) {
 
   player_double_down(&game);
 
-  CHECK_EQ(game.bet, initial_bet * 2);
+  CHECK_EQ(game.bet, initial_bet);
   CHECK_EQ(game.phase, STATE_FINISHED);
 }
 

@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Fixed an issue where the game field was not displayed while showing the result of a completed round. The final hands are now visible together with the result notification.
+- Fixed Double Down betting. The additional wager is now deducted from the player's balance, while the original bet remains unchanged and the final payout correctly accounts for the doubled wager.
 
 ## [0.1.1]
 
