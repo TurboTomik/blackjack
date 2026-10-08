@@ -61,7 +61,7 @@ int can_double_down(const unsigned int money, const unsigned int bet,
 
 static void double_down(GameState *game) {
   game->money -= game->bet;
-  game->is_double = 1;
+  game->wager += game->bet;
   deal_to_hand(&game->deck, &game->player);
   calculate_hand_score(&game->player);
 }
@@ -79,7 +79,7 @@ void begin_round(GameState *game) {
     return;
   }
   game->money -= game->bet;
-  game->is_double = 0;
+  game->wager = game->bet;
   change_game_phase(game, STATE_PLAYER_TURN);
 
   prepare_round(game);
@@ -87,11 +87,7 @@ void begin_round(GameState *game) {
 
 static void finish_round(GameState *game) {
   GameResult result = determine_winner(&game->dealer, &game->player);
-  if (game->is_double) {
-    apply_result(&game->money, game->bet * 2, result);
-  } else {
-    apply_result(&game->money, game->bet, result);
-  }
+  apply_result(&game->money, game->wager, result);
 
   change_game_phase(game, STATE_FINISHED);
   if (result == RESULT_PLAYER_WIN || result == RESULT_BLACKJACK) {
@@ -102,6 +98,7 @@ static void finish_round(GameState *game) {
     trigger_notification(game, NOTIF_RESULT_PUSH);
   }
 }
+
 void player_hit(GameState *game) {
   if (!deal_to_hand(&game->deck, &game->player)) {
     return;
