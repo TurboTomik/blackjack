@@ -36,4 +36,11 @@ typedef struct {
   NotificationType active_notification;
 } GameState;
 
+void init_game_state(GameState *game, unsigned int starting_money,
+                     unsigned int starting_bet);
+void change_game_phase(GameState *game, GamePhase new_phase);
+void start_betting(GameState *game);
+void trigger_notification(GameState *game, NotificationType type);
+void dismiss_notification(GameState *game);
+
 #endif // !GAME_H

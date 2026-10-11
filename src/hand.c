@@ -1,7 +1,9 @@
 #include "hand.h"
 #include "card.h"
 #include "deck.h"
-#include "stdlib.h"
+#include <string.h>
+
+void reset_hand(Hand *hand) { memset(hand, 0, sizeof *hand); }
 
 int deal_to_hand(Deck *deck, Hand *hand) {
   if (hand->count >= MAX_HAND_SIZE) {

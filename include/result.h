@@ -13,6 +13,6 @@ typedef enum {
 } GameResult;
 
 GameResult determine_winner(const Hand *dealer_hand, const Hand *player_hand);
-void apply_result(unsigned *money, unsigned bet, GameResult result);
+void apply_result(unsigned *money, unsigned wager, GameResult result);
 
 #endif // !RESULT_H

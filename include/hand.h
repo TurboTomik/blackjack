@@ -13,6 +13,7 @@ typedef struct {
   unsigned score;
 } Hand;
 
+void reset_hand(Hand *hand);
 int deal_to_hand(Deck *deck, Hand *hand);
 int calculate_hand_score(Hand *hand);
 int is_bust(const Hand *hand);

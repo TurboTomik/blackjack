@@ -1,9 +1,7 @@
-#include "game.h"
+#include "round.h"
 #include "test.h"
 
 #include <string.h>
-
-#include "round.h"
 
 static GameState game;
 
@@ -85,22 +83,6 @@ static void test_player_double_down(void) {
   CHECK_EQ(game.phase, STATE_FINISHED);
 }
 
-static void test_trigger_and_dismiss_notification(void) {
-  setup();
-  game.phase = STATE_BETTING;
-
-  trigger_notification(&game, NOTIF_INSUFFICIENT_FUNDS);
-
-  CHECK_EQ(game.phase, STATE_BETTING);
-  CHECK_EQ(game.previous_phase, STATE_BETTING);
-  CHECK_EQ(game.active_notification, NOTIF_INSUFFICIENT_FUNDS);
-
-  dismiss_notification(&game);
-
-  CHECK_EQ(game.phase, STATE_BETTING);
-  CHECK_EQ(game.active_notification, NOTIF_NONE);
-}
-
 void run_round_tests(void) {
   RUN_TEST(test_can_double_down);
 
@@ -110,6 +92,4 @@ void run_round_tests(void) {
   RUN_TEST(test_player_hit);
   RUN_TEST(test_player_stand);
   RUN_TEST(test_player_double_down);
-
-  RUN_TEST(test_trigger_and_dismiss_notification);
 }

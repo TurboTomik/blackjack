@@ -20,19 +20,19 @@ GameResult determine_winner(const Hand *dealer_hand, const Hand *player_hand) {
   return RESULT_PUSH;
 }
 
-void apply_result(unsigned *money, const unsigned bet,
+void apply_result(unsigned *money, const unsigned wager,
                   const GameResult result) {
   switch (result) {
   case RESULT_PLAYER_WIN:
-    *money += bet * 2;
+    *money += wager * 2;
     break;
   case RESULT_DEALER_WIN:
     break;
   case RESULT_BLACKJACK:
-    *money += (int)(bet * BLACKJACK_COEFFICIENT);
+    *money += (int)(wager * BLACKJACK_COEFFICIENT);
     break;
   case RESULT_PUSH:
-    *money += bet;
+    *money += wager;
     break;
   }
 }

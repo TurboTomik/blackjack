@@ -10,6 +10,7 @@ void run_bet_tests(void);
 void run_result_tests(void);
 void run_round_tests(void);
 void run_input_tests(void);
+void run_game_tests(void);
 
 int main(void) {
   run_card_tests();
@@ -19,6 +20,7 @@ int main(void) {
   run_result_tests();
   run_round_tests();
   run_input_tests();
+  run_game_tests();
 
   printf("\n%d/%d tests passed\n", tests_run - tests_failed, tests_run);
   return tests_failed ? 1 : 0;
